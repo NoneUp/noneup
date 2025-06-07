@@ -2,142 +2,54 @@
 <html lang="uk">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <link rel="manifest" href="./manifest.json">
-    <link rel="apple-touch-icon" href="./logo-192x192.png">
-    <link rel="icon" href="logo.jpg" type="image/png">
-    <title>NoneUp</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Гра 2048</title>
     <style>
-        :root {
-            --primary-color: #8f7a66;
-            --secondary-color: #bbada0;
-            --text-color: #f9f6f2;
-            --tile-bg: #cdc1b4;
-            --bg-color: #121212;
-            --modal-bg: #222;
-            --button-bg: #444;
-        }
-        
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Arial', sans-serif;
-            background: var(--bg-color);
-            color: var(--text-color);
+            font-family: Arial, sans-serif;
+            background: #121212;
+            color: white;
             height: 100vh;
-            overflow: hidden;
+            overflow-x: hidden;
             position: relative;
+            transition: background 0.3s, color 0.3s;
             display: flex;
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
         }
-        
         body.light {
-            --primary-color: #8f7a66;
-            --secondary-color: #bbada0;
-            --text-color: #222;
-            --tile-bg: #cdc1b4;
-            --bg-color: #f5f5f5;
-            --modal-bg: #fff;
-            --button-bg: #ddd;
+            background: #f5f5f5;
+            color: #222;
         }
 
-        h1 { 
-            margin-bottom: 10px; 
-            font-size: 3rem;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            animation: fadeIn 1s ease;
-        }
-        
-        .info { 
-            margin-bottom: 15px; 
-            font-size: 1.2rem;
-            animation: fadeIn 1.2s ease;
-        }
-
-        .grid-container {
-            perspective: 1000px;
-        }
+        /* Стилі для гри 2048 */
+        h1 { margin-bottom: 10px; }
+        .info { margin-bottom: 15px; font-size: 18px; }
 
         .grid {
             display: grid;
             grid-template-columns: repeat(4, 80px);
             grid-gap: 10px;
-            background: var(--secondary-color);
-            padding: 15px;
+            background: #bbada0;
+            padding: 10px;
             border-radius: 10px;
-            opacity: 0;
-            transform: translateY(20px) rotateX(10deg);
-            transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-        }
-        
-        .grid.show {
-            opacity: 1;
-            transform: translateY(0) rotateX(0);
         }
 
         .tile {
             width: 80px;
             height: 80px;
-            background: var(--tile-bg);
-            font-size: 2rem;
+            background: #cdc1b4;
+            font-size: 24px;
             font-weight: bold;
             color: #776e65;
             display: flex;
             justify-content: center;
             align-items: center;
             border-radius: 5px;
-            transition: all 0.2s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .tile::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(255,255,255,0.1);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-        
-        .tile:hover::before {
-            opacity: 1;
-        }
-        
-        .tile.appear {
-            animation: tileAppear 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-        }
-        
-        @keyframes tileAppear {
-            0% { 
-                transform: scale(0) rotate(180deg);
-                opacity: 0;
-            }
-            50% { 
-                transform: scale(1.1) rotate(-10deg);
-            }
-            100% { 
-                transform: scale(1) rotate(0);
-                opacity: 1;
-            }
-        }
-        
-        .tile.merge {
-            animation: tileMerge 0.3s ease forwards;
-            z-index: 10;
-        }
-        
-        @keyframes tileMerge {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
+            transition: background 0.2s ease;
         }
 
         .tile[data-val='2']    { background: #eee4da; }
@@ -146,424 +58,246 @@
         .tile[data-val='16']   { background: #f59563; color: #fff; }
         .tile[data-val='32']   { background: #f67c5f; color: #fff; }
         .tile[data-val='64']   { background: #f65e3b; color: #fff; }
-        .tile[data-val='128']  { 
-            background: #edcf72; 
-            color: #fff;
-            font-size: 1.8rem;
-        }
-        .tile[data-val='256']  { 
-            background: #edcc61; 
-            color: #fff;
-            font-size: 1.8rem;
-        }
-        .tile[data-val='512']  { 
-            background: #edc850; 
-            color: #fff;
-            font-size: 1.8rem;
-        }
-        .tile[data-val='1024'] { 
-            background: #edc53f; 
-            color: #fff;
-            font-size: 1.5rem;
-        }
-        .tile[data-val='2048'] { 
-            background: #edc22e; 
-            color: #fff;
-            font-size: 1.5rem;
-        }
+        .tile[data-val='128']  { background: #edcf72; color: #fff; }
+        .tile[data-val='256']  { background: #edcc61; color: #fff; }
+        .tile[data-val='512']  { background: #edc850; color: #fff; }
+        .tile[data-val='1024'] { background: #edc53f; color: #fff; }
+        .tile[data-val='2048'] { background: #edc22e; color: #fff; }
 
         .btn {
-            margin-top: 20px;
-            padding: 12px 24px;
-            font-size: 1.1rem;
-            background: var(--primary-color);
+            margin-top: 10px;
+            padding: 8px 16px;
+            font-size: 16px;
+            background: #8f7a66;
             color: white;
             border: none;
-            border-radius: 8px;
+            border-radius: 5px;
             cursor: pointer;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-            animation: fadeIn 1.5s ease;
-        }
-        
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
-        }
-        
-        .btn:active {
-            transform: translateY(1px);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-        
-        .btn::after {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 5px;
-            height: 5px;
-            background: rgba(255, 255, 255, 0.5);
-            opacity: 0;
-            border-radius: 100%;
-            transform: scale(1, 1) translate(-50%);
-            transform-origin: 50% 50%;
-        }
-        
-        .btn:focus:not(:active)::after {
-            animation: ripple 1s ease-out;
-        }
-        
-        @keyframes ripple {
-            0% {
-                transform: scale(0, 0);
-                opacity: 0.5;
-            }
-            100% {
-                transform: scale(20, 20);
-                opacity: 0;
-            }
         }
 
-        /* Пауза */
-        .pause-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.7);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-            backdrop-filter: blur(5px);
-            animation: fadeIn 0.5s ease;
-        }
-        
-        .pause-content {
-            background: var(--modal-bg);
-            padding: 30px;
-            border-radius: 15px;
-            text-align: center;
-            max-width: 300px;
-            width: 100%;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            transform: scale(0.9);
-            opacity: 0;
-            animation: scaleIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        @keyframes scaleIn {
-            to {
-                transform: scale(1);
-                opacity: 1;
-            }
+        #game-over {
+            margin-top: 20px;
+            font-size: 22px;
+            color: red;
+            font-weight: bold;
         }
 
         @media (max-width: 500px) {
             .grid {
                 grid-template-columns: repeat(4, 60px);
                 grid-gap: 8px;
-                padding: 10px;
             }
 
             .tile {
                 width: 60px;
                 height: 60px;
-                font-size: 1.5rem;
-            }
-            
-            h1 {
-                font-size: 2rem;
-            }
-            
-            .info {
-                font-size: 1rem;
+                font-size: 18px;
             }
         }
 
+        /* Стилі для кнопок та модалок */
         #topButtons {
             position: fixed;
-            top: 20px;
-            left: 20px;
+            top: 10px;
+            left: 10px;
             display: flex;
             gap: 10px;
             z-index: 3000;
-            animation: fadeIn 1s ease;
         }
-        
-        .top-btn {
-            background: var(--button-bg);
+        button {
+            background: #444;
             border: none;
-            border-radius: 8px;
-            padding: 8px 12px;
-            color: var(--text-color);
+            border-radius: 5px;
+            padding: 6px 12px;
+            color: white;
             cursor: pointer;
             font-size: 14px;
             user-select: none;
             display: flex;
             align-items: center;
             position: relative;
-            transition: all 0.3s ease;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
-        
-        .top-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        button:hover {
+            background: #666;
         }
-        
-        .top-btn:active {
-            transform: translateY(1px);
+        button:focus {
+            outline: 2px solid #aaa;
         }
-        
         #settingsBtn {
-            font-size: 20px;
-            width: 40px;
-            height: 40px;
+            font-size: 18px;
+            width: 34px;
             justify-content: center;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: clip;
             padding: 0;
         }
-        
+        #settingsBtn span {
+            display: block;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* Нова стилі для кнопки Play/Pause зверху */
         #playPauseBtnTop {
-            font-size: 20px;
-            width: 40px;
-            height: 40px;
+            font-size: 18px; /* Розмір за замовчуванням */
+            width: 34px;
             justify-content: center;
             padding: 0;
-            display: none; /* Приховуємо за замовчуванням, показуємо JS */
+            display: none; /* Прихована за замовчуванням */
+            box-sizing: border-box;
         }
-        
         #playPauseBtnTop span {
             display: block;
             width: 100%;
             text-align: center;
             line-height: 1;
         }
+        #playPauseBtnTop.play-icon {
+            font-size: 20px; /* Трикутник може бути трохи більшим */
+        }
+        #playPauseBtnTop.pause-icon {
+            font-size: 16px; /* Дві палички можуть бути меншими */
+        }
 
+
+        /* Модалки */
         .modal-overlay {
             position: fixed;
-            top: 0; 
-            left: 0; 
-            right: 0; 
-            bottom: 0;
+            top: 0; left: 0; right: 0; bottom: 0;
             background: rgba(0,0,0,0.8);
-            display: none; /* Приховуємо за замовчуванням */
+            display: none;
             justify-content: center;
             align-items: center;
             z-index: 2500;
             padding: 20px;
-            animation: fadeIn 0.3s ease;
         }
-        
         .modal {
-            background: var(--modal-bg);
-            border-radius: 15px;
+            background: #222;
+            border-radius: 10px;
             max-width: 400px;
             width: 100%;
-            padding: 25px;
+            padding: 20px 20px 20px 20px;
             position: relative;
-            box-shadow: 0 15px 30px rgba(0,0,0,0.4);
-            transform: translateY(20px);
-            opacity: 0;
-            animation: modalIn 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+            box-shadow: 0 0 20px #000;
+            color: white;
+            box-sizing: border-box;
         }
-        
-        @keyframes modalIn {
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+        body.light .modal {
+            background: #fff;
+            color: #222;
+            box-shadow: 0 0 20px #aaa;
         }
-        
+
         .modal h2 {
             margin-top: 0;
             margin-right: 40px;
             word-break: break-word;
-            color: var(--text-color);
-        }
-        
-        .modal p {
-            color: var(--text-color);
-            line-height: 1.6;
         }
 
         .close-btn {
             position: absolute;
             right: 15px;
-            top: 15px;
-            font-size: 28px;
+            top: 10px;
+            font-size: 26px;
             background: transparent;
             border: none;
-            color: var(--text-color);
+            color: white;
             cursor: pointer;
             user-select: none;
             line-height: 1;
-            padding: 5px;
-            width: 40px;
-            height: 40px;
+            padding: 0;
+            width: 30px;
+            height: 30px;
             display: flex;
             justify-content: center;
             align-items: center;
-            border-radius: 50%;
-            transition: all 0.3s ease;
         }
-        
         .close-btn:hover {
-            background: rgba(0,0,0,0.1);
-            transform: rotate(90deg);
+            color: #ccc;
+        }
+        body.light .close-btn {
+            color: #222;
+        }
+        body.light .close-btn:hover {
+            color: #555;
         }
 
+        /* Оновлений стиль для кнопки "Назад" в модалці Управління */
         #controlsBackBtn {
-            right: 15px;
-            top: 15px;
-            font-size: 24px;
+            right: 10px; /* Змінено для кращого розташування */
+            top: 10px;
+            font-size: 24px; /* Збільшений розмір стрілки */
             position: absolute;
-            color: var(--text-color);
+            color: white;
             background: transparent;
             border: none;
             cursor: pointer;
             user-select: none;
-            padding: 5px;
-            width: 40px;
-            height: 40px;
+            padding: 0; /* Важливо: прибрати будь-які внутрішні відступи */
+            width: 34px; /* Зробити її співрозмірною з іншими верхніми кнопками */
+            height: 34px;
             display: flex;
             justify-content: center;
             align-items: center;
-            border-radius: 50%;
-            transition: all 0.3s ease;
+            box-sizing: border-box; /* Врахувати padding у загальному розмірі */
         }
-        
-        #controlsBackBtn:hover {
-            background: rgba(0,0,0,0.1);
-            transform: translateX(-5px);
+        body.light #controlsBackBtn {
+            color: #222;
+        }
+        body.light #controlsBackBtn:hover {
+            color: #555;
         }
 
         .mini-popup {
             position: absolute;
-            top: 45px;
+            top: 38px;
             left: 0;
-            background: var(--modal-bg);
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            background: #222;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.7);
             padding: 10px;
             display: none;
             flex-direction: column;
             gap: 8px;
-            min-width: 150px;
+            min-width: 130px;
             z-index: 4000;
-            animation: fadeIn 0.3s ease;
-            transform-origin: top left;
-            transform: scale(0.9);
-            opacity: 0;
-            animation: scaleIn 0.2s ease forwards;
         }
-        
+        body.light .mini-popup {
+            background: #eee;
+            color: #222;
+            box-shadow: 0 0 15px rgba(0,0,0,0.3);
+        }
         .mini-popup button {
             background: transparent;
-            color: var(--text-color);
-            padding: 8px 12px;
-            border-radius: 6px;
+            color: inherit;
+            padding: 6px 10px;
+            border-radius: 5px;
             text-align: left;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
-        
         .mini-popup button:hover {
-            background: rgba(0,0,0,0.1);
+            background: #555;
+            color: white;
         }
-        
-        .play-line {
-            position: absolute;
-            height: 3px;
-            background: white;
-            bottom: 0;
-            left: 0;
-            transform-origin: left center;
-            transform: scaleX(0);
-            transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-            border-radius: 3px;
+        body.light .mini-popup button:hover {
+            background: #ccc;
+            color: #222;
         }
-        
-        .btn.animate .play-line {
-            transform: scaleX(1);
-        }
-
-        /* Стилі для центрування кнопки PWA */
-        .modal-actions {
-            display: flex;
-            flex-direction: column;
-            align-items: center; /* Центрує елементи по горизонталі */
-            margin-top: 20px;
-            gap: 15px; /* Простір між кнопкою та повідомленням */
-        }
-        
-                /* Нові стилі для кнопок мови та теми */
-        .setting-options .top-btn {
-            width: 35%; /* Робить кнопки на всю ширину батьківського елемента */
-            justify-content: space-between; /* Розносить текст і стрілку по краях */
-            padding-right: 15px; /* Додаємо трохи відступу праворуч */
-            height: 40px;
-        }
-
-        /* Якщо ви хочете, щоб попапи також були на всю ширину кнопки */
-        .setting-options .mini-popup {
-            min-width: unset; /* Скидаємо min-width */
-            width: 45%; /* Робить попап на всю ширину кнопки */
-        }
-    </style>
     </style>
 </head>
 <body>
 
     <div id="topButtons">
-        <button id="installButton" class="top-btn" title="Встановити">⏏</button>
-        <button id="rulesBtn" class="top-btn" data-lang-key="rulesButton">Правила</button>
-        <button id="settingsBtn" class="top-btn" title="Налаштування"><span aria-hidden="true">⚙︎</span></button>
-        <button id="playPauseBtnTop" class="top-btn" title="Продовжити/Пауза"><span aria-hidden="true"></span></button>
-        
-        <div id="installModalOverlay" class="modal-overlay">
-            <div class="modal">
-                <button class="close-btn" id="closeInstallModalBtn" aria-label="Закрити">&times;</button>
-                <h2 data-lang-key="installModalTitle">Встановити додаток</h2>
-                <p data-lang-key="installModalDescription"></p> 
-                <div class="modal-actions">
-                    <button id="pwaInstallBtn" class="btn" style="display: none;" data-lang-key="installButtonText">Встановити</button>
-                    <p id="installMessage" style="margin-top: 0;"></p> 
-                </div>
-            </div>
-        </div>
+        <button id="rulesBtn" data-lang-key="rulesButton">?</button>
+        <button id="playPauseBtnTop" title="Продовжити/Пауза"><span aria-hidden="true"></span></button>
+        <button id="settingsBtn" title="Налаштування"><span aria-hidden="true">&#9881;</span></button>
     </div>
 
-    <h1 data-lang-key="gameTitle">2048 NoneUp</h1>
+    <h1 data-lang-key="gameTitle">2048</h1>
     <div class="info"><span data-lang-key="scoreLabel">Очки</span>: <span id="score">0</span> | <span data-lang-key="bestLabel">Рекорд</span>: <span id="best">0</span></div>
-    
-    <div class="grid-container">
-        <div class="grid" id="grid"></div>
-    </div>
-    
-    <button class="btn" id="start" data-lang-key="startButton">
-        <span class="btn-text">Грати</span>
-        <span class="play-line"></span>
-    </button>
-
-    <div id="pauseOverlay" class="pause-overlay">
-        <div class="pause-content">
-            <h2 data-lang-key="pauseTitle">Гра на паузі</h2>
-            <p data-lang-key="pauseDescription">Натисніть кнопку "Продовжити" або клавішу пробілу</p>
-            <button id="continueBtn" class="btn" style="margin-top: 15px;" data-lang-key="continueButton">Продовжити</button>
-        </div>
-    </div>
+    <div class="grid" id="grid"></div>
+    <button class="btn" id="start" data-lang-key="startButton">Грати</button>
+    <div id="game-over"></div>
 
     <div id="rulesModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="rulesTitle">
         <div class="modal">
@@ -571,7 +305,7 @@
             <h2 id="rulesTitle" data-lang-key="rulesTitle">Правила гри 2048</h2>
             <p><strong data-lang-key="pcLabel">На ПК:</strong> <span data-lang-key="pcControls">керуй грою за допомогою стрілок: ← ↑ → ↓ або WASD.</span></p>
             <p><strong data-lang-key="phoneLabel">На телефоні:</strong> <span data-lang-key="phoneControls">керуй грою свайпами вгору, вниз, вліво та вправо.</span></p>
-            <p><span data-lang-key="gameGoal">З'єднуй однакові числа, щоб отримати 2048!</span></p>
+            <p><span data-lang-key="gameGoal">З'єднуй однакові числа, щоб отримати 2048 і виграти гру!</span></p>
         </div>
     </div>
 
@@ -579,9 +313,10 @@
         <div class="modal">
             <button class="close-btn" aria-label="Закрити">&times;</button>
             <h2 id="settingsTitle" data-lang-key="settingsTitle">Налаштування</h2>
-            <button id="controlsBtn" class="btn" style="margin-top: 15px;" data-lang-key="controlsButton">Управління</button>
-            <div class="setting-options" style="margin-top: 20px;"> <div style="position: relative; margin-bottom: 15px;">
-                    <button id="langBtn" class="top-btn" data-lang-key="languageButton">Мова ▼</button>
+            <button id="controlsBtn" style="margin-top: 15px;" data-lang-key="controlsButton">Управління</button>
+            <div style="margin-top: 20px;">
+                <div style="position: relative; margin-bottom: 15px;">
+                    <button id="langBtn" data-lang-key="languageButton">Мова ▼</button>
                     <div id="langPopup" class="mini-popup" role="listbox" aria-label="Вибір мови">
                         <button data-lang="zh">中文 (Китайська)</button>
                         <button data-lang="uk">Українська</button>
@@ -590,7 +325,7 @@
                     </div>
                 </div>
                 <div style="position: relative;">
-                    <button id="themeBtn" class="top-btn" data-lang-key="themeButton">Тема ▼</button>
+                    <button id="themeBtn" data-lang-key="themeButton">Тема ▼</button>
                     <div id="themePopup" class="mini-popup" role="listbox" aria-label="Вибір теми">
                         <button data-theme="dark" data-lang-key="darkTheme">Темна тема</button>
                         <button data-theme="light" data-lang-key="lightTheme">Світла тема</button>
@@ -607,8 +342,6 @@
             <p><strong data-lang-key="pcLabel">ПК:</strong></p>
             <ul>
                 <li><span data-lang-key="arrows">Стрілки: ← ↑ → ↓</span></li>
-                <li>WASD: <span data-lang-key="wasdControls">альтернативне управління</span></li>
-                <li><span data-lang-key="spacePause">Пробіл: пауза</span></li>
             </ul>
             <p><strong data-lang-key="phoneLabel">Телефон:</strong></p>
             <ul>
@@ -618,412 +351,83 @@
     </div>
 
     <script>
+        // JS для гри 2048
         const grid = document.getElementById("grid");
         const scoreDisplay = document.getElementById("score");
         const bestDisplay = document.getElementById("best");
-        const startBtn = document.getElementById("start");
-        const playPauseBtnTop = document.getElementById("playPauseBtnTop");
-        const playLine = startBtn.querySelector('.play-line');
-        const pauseOverlay = document.getElementById("pauseOverlay");
-        const continueBtn = document.getElementById("continueBtn");
+        const gameOverDisplay = document.getElementById("game-over");
+
+        const startBtn = document.getElementById("start"); // Кнопка "Грати" внизу
+        const playPauseBtnTop = document.getElementById("playPauseBtnTop"); // Єдина кнопка Play/Pause зверху
 
         let size = 4;
         let tiles = [];
-        let paused = true;
-        let gameStarted = false;
-        let gameOver = false;
+        let paused = true; // Гра починається на паузі
+        let gameStarted = false; // Чи гра була хоча б раз запущена
+        let gameOver = false; // Чи гра завершена (програш або виграш)
         let currentScore = 0;
 
-        // PWA елементи
-        const installButton = document.getElementById('installButton'); // Кнопка "Встановити" у верхньому лівому куті
-        const installModalOverlay = document.getElementById('installModalOverlay');
-        const closeInstallModalBtn = document.getElementById('closeInstallModalBtn');
-        const pwaInstallBtn = document.getElementById('pwaInstallBtn'); // Кнопка "Встановити" всередині модалки
-        const installMessage = document.getElementById('installMessage');
-        let deferredPrompt; // Для PWA встановлення
-
-        // Мовні налаштування
-        const translations = {
-            uk: {
-                gameTitle: "NoneUp",
-                scoreLabel: "Очки",
-                bestLabel: "Рекорд",
-                startButton: "Грати",
-                playButtonTitle: "Продовжити",
-                pauseButtonTitle: "Пауза",
-                rulesButton: "?",
-                settingsButtonTitle: "Налаштування",
-                rulesTitle: "Правила гри 2048",
-                pcLabel: "На ПК:",
-                pcControls: "керуй грою за допомогою стрілок: ← ↑ → ↓ або WASD.",
-                phoneLabel: "На телефоні:",
-                phoneControls: "керуй грою свайпами вгору, вниз, вліво та вправо.",
-                gameGoal: "З'єднуй однакові числа, щоб отримати 2048!",
-                settingsTitle: "Налаштування",
-                controlsButton: "Управління",
-                languageButton: "Мова ▼",
-                themeButton: "Тема ▼",
-                darkTheme: "Темна тема",
-                lightTheme: "Світла тема",
-                controlsTitle: "Управління",
-                arrows: "Стрілки: ← ↑ → ↓",
-                wasdControls: "альтернативне управління",
-                spacePause: "Пробіл: пауза",
-                closeButton: "Закрити",
-                backButton: "Повернутися",
-                pauseTitle: "Гра на паузі",
-                pauseDescription: "Натисніть кнопку \"Продовжити\" або клавішу пробілу",
-                continueButton: "Продовжити",
-                // Нові переклади для модалки встановлення
-                installModalTitle: "Встановити додаток",
-                installModalDescription: "", // Змінено на порожній рядок
-                installButtonText: "Встановити",
-                installMessageUnable: "Наразі встановлення неможливе. Спробуйте пізніше або використовуйте функцію 'Додати на головний екран' у меню браузера.", 
-                installMessageSuccess: "Додаток успішно встановлено!",
-                installMessagePrompt: "" // Змінено на порожній рядок
-            },
-            en: {
-                gameTitle: "NoneUp",
-                scoreLabel: "Score",
-                bestLabel: "Best",
-                startButton: "Play",
-                playButtonTitle: "Continue",
-                pauseButtonTitle: "Pause",
-                rulesButton: "?",
-                settingsButtonTitle: "Settings",
-                rulesTitle: "2048 Game Rules",
-                pcLabel: "On PC:",
-                pcControls: "control the game using arrow keys: ← ↑ → ↓ or WASD.",
-                phoneLabel: "On Phone:",
-                phoneControls: "control the game with swipes up, down, left, and right.",
-                gameGoal: "Combine identical numbers to get 2048!",
-                settingsTitle: "Settings",
-                controlsButton: "Controls",
-                languageButton: "Language ▼",
-                themeButton: "Theme ▼",
-                darkTheme: "Dark Theme",
-                lightTheme: "Light Theme",
-                controlsTitle: "Controls",
-                arrows: "Arrows: ← ↑ → ↓",
-                wasdControls: "alternative controls",
-                spacePause: "Spacebar: pause",
-                closeButton: "Close",
-                backButton: "Back",
-                pauseTitle: "Game Paused",
-                pauseDescription: "Press the 'Continue' button or spacebar",
-                continueButton: "Continue",
-                installModalTitle: "Install App",
-                installModalDescription: "", // Changed to empty string
-                installButtonText: "Install",
-                installMessageUnable: "Installation is currently not possible. Try again later or use the 'Add to Home Screen' feature in your browser menu.",
-                installMessageSuccess: "App successfully installed!",
-                installMessagePrompt: "" // Changed to empty string
-            },
-            zh: { // Китайська
-                gameTitle: "NoneUp",
-                scoreLabel: "分數",
-                bestLabel: "最佳",
-                startButton: "玩",
-                playButtonTitle: "繼續",
-                pauseButtonTitle: "暫停",
-                rulesButton: "?",
-                settingsButtonTitle: "設置",
-                rulesTitle: "2048 遊戲規則",
-                pcLabel: "在電腦上:",
-                pcControls: "使用方向鍵控制遊戲：← ↑ → ↓ 或 WASD。",
-                phoneLabel: "在手機上:",
-                phoneControls: "通過向上、向下、向左和向右滑動來控制遊戲。",
-                gameGoal: "合併相同的數字以獲得 2048！",
-                settingsTitle: "設置",
-                controlsButton: "控制",
-                languageButton: "語言 ▼",
-                themeButton: "主題 ▼",
-                darkTheme: "深色主題",
-                lightTheme: "淺色主題",
-                controlsTitle: "控制",
-                arrows: "箭頭: ← ↑ → ↓",
-                wasdControls: "替代控制",
-                spacePause: "空格鍵: 暫停",
-                closeButton: "關閉",
-                backButton: "返回",
-                pauseTitle: "遊戲暫停",
-                pauseDescription: "按\"繼續\"按鈕或空格鍵",
-                continueButton: "繼續",
-                installModalTitle: "安裝應用程式",
-                installModalDescription: "", // 更改為空字符串
-                installButtonText: "安裝",
-                installMessageUnable: "目前無法安裝。請稍後再試或使用瀏覽器菜單中的\"新增至主螢幕\"功能。",
-                installMessageSuccess: "應用程式已成功安裝！",
-                installMessagePrompt: "" // 更改為空字符串
-            },
-            ja: { // Японська
-                gameTitle: "NoneUp",
-                scoreLabel: "スコア",
-                bestLabel: "最高",
-                startButton: "プレイ",
-                playButtonTitle: "続行",
-                pauseButtonTitle: "一時停止",
-                rulesButton: "?",
-                settingsButtonTitle: "設定",
-                rulesTitle: "2048 ゲームルール",
-                pcLabel: "PCで:",
-                pcControls: "矢印キー：← ↑ → ↓ または WASD を使ってゲームを操作します。",
-                phoneLabel: "携帯電話で:",
-                phoneControls: "上下左右にスワイプしてゲームを操作します。",
-                gameGoal: "同じ数字を結合して2048に到達しよう！",
-                settingsTitle: "設定",
-                controlsButton: "操作",
-                languageButton: "言語 ▼",
-                themeButton: "テーマ ▼",
-                darkTheme: "ダークテーマ",
-                lightTheme: "ライトテーマ",
-                controlsTitle: "操作",
-                arrows: "矢印: ← ↑ → ↓",
-                wasdControls: "代替操作",
-                spacePause: "スペースキー: 一時停止",
-                closeButton: "閉じる",
-                backButton: "戻る",
-                pauseTitle: "ゲーム一時停止中",
-                pauseDescription: "「続行」ボタンまたはスペースキーを押してください",
-                continueButton: "続行",
-                installModalTitle: "アプリをインストール",
-                installModalDescription: "", // 空の文字列に変更
-                installButtonText: "インストール",
-                installMessageUnable: "現在インストールできません。後でもう一度試すか、ブラウザのメニューから「ホーム画面に追加」機能を使用してください。",
-                installMessageSuccess: "アプリが正常にインストールされました！",
-                installMessagePrompt: "" // 空の文字列に変更
-            }
-        };
-
-        let currentLang = localStorage.getItem('lang') || 'uk'; // Отримуємо збережену мову або встановлюємо за замовчуванням українську
-
-        // Функція для застосування перекладів
-        function applyTranslations(lang) {
-            const elements = document.querySelectorAll('[data-lang-key]');
-            elements.forEach(element => {
-                const key = element.dataset.langKey;
-                // Перевіряємо на undefined, щоб дозволити порожні рядки
-                if (translations[lang] && translations[lang][key] !== undefined) { 
-                    element.textContent = translations[lang][key];
-                }
-            });
-
-            // Оновлення title для кнопок, які не мають data-lang-key для title
-            document.getElementById('installButton').title = translations[lang].installButtonText || 'Install';
-            document.getElementById('settingsBtn').title = translations[lang].settingsButtonTitle || 'Settings';
-            
-            // Оновіть title для playPauseBtnTop відповідно до поточного стану (play/pause)
-            if (playPauseBtnTop.classList.contains('play-icon')) {
-                playPauseBtnTop.title = translations[lang].playButtonTitle;
-            } else {
-                playPauseBtnTop.title = translations[lang].pauseButtonTitle;
-            }
-            
-            // Оновлення тексту кнопки закриття модалок
-            document.querySelectorAll('.close-btn').forEach(btn => {
-                btn.ariaLabel = translations[lang].closeButton || 'Close';
-            });
-
-            // Оновлення тексту кнопки повернення
-            if (controlsBackBtn) {
-                controlsBackBtn.ariaLabel = translations[lang].backButton || 'Back';
-            }
-
-            // Оновлення тексту кнопки "Встановити" в модалці встановлення (якщо PWA доступний)
-            if (pwaInstallBtn) {
-                pwaInstallBtn.textContent = translations[lang].installButtonText || 'Install';
-            }
-            
-            // Оновлення повідомлення встановлення
-            if (installMessage && installMessage.dataset.messageType) { 
-                const messageType = installMessage.dataset.messageType;
-                if (messageType === 'prompt') {
-                    installMessage.textContent = translations[lang].installMessagePrompt;
-                } else if (messageType === 'unable') {
-                    installMessage.textContent = translations[lang].installMessageUnable;
-                } else if (messageType === 'success') {
-                    installMessage.textContent = translations[lang].installMessageSuccess;
-                }
-            }
-        }
-
-        // Функція для зміни теми
-        function applyTheme(theme) {
-            document.body.classList.remove('light', 'dark'); // Видаляємо всі теми
-            if (theme === 'light') {
-                document.body.classList.add('light');
-            }
-            // Якщо тема dark, то body.light не додається, залишаючи значення за замовчуванням
-            localStorage.setItem('theme', theme);
-        }
-
+        // Функція, яка керує видимістю та іконкою кнопки Play/Pause
         function updateButtonVisibility() {
             if (gameOver || !gameStarted) {
+                // Якщо гра завершена або ще не починалася, показуємо велику кнопку "Грати"
                 startBtn.style.display = 'block';
-                playPauseBtnTop.style.display = 'none';
-                pauseOverlay.style.display = 'none';
+                playPauseBtnTop.style.display = 'none'; // Ховаємо верхню Play/Pause
             } else if (paused) {
+                // Якщо гра на паузі, показуємо верхню кнопку з іконкою "Play"
                 startBtn.style.display = 'none';
                 playPauseBtnTop.style.display = 'flex';
                 playPauseBtnTop.classList.remove('pause-icon');
                 playPauseBtnTop.classList.add('play-icon');
-                playPauseBtnTop.querySelector('span').innerHTML = '▶';
-                playPauseBtnTop.title = translations[currentLang].playButtonTitle;
-                pauseOverlay.style.display = 'flex';
+                playPauseBtnTop.querySelector('span').innerHTML = '&#9658;'; // Іконка трикутника
+                playPauseBtnTop.title = translations[currentLang]['playButtonTitle']; // Оновлюємо title
             } else {
+                // Якщо гра активна, показуємо верхню кнопку з іконкою "Pause"
                 startBtn.style.display = 'none';
                 playPauseBtnTop.style.display = 'flex';
                 playPauseBtnTop.classList.remove('play-icon');
                 playPauseBtnTop.classList.add('pause-icon');
-                playPauseBtnTop.querySelector('span').innerHTML = '⏸︎';
-                playPauseBtnTop.title = translations[currentLang].pauseButtonTitle;
-                pauseOverlay.style.display = 'none';
+                playPauseBtnTop.querySelector('span').innerHTML = '&#9646;&#9646;'; // Іконка двох паличок
+                playPauseBtnTop.title = translations[currentLang]['pauseButtonTitle']; // Оновлюємо title
             }
         }
 
-         // --- Виправлення для модальних вікон ---
-
-        // Функція для відкриття модального вікна
-        function openModal(modalId) {
-            const modalOverlay = document.getElementById(modalId);
-            if (modalOverlay) {
-                modalOverlay.classList.add('show'); // Додаємо клас для відображення
-                modalOverlay.setAttribute('aria-hidden', 'false');
-                modalOverlay.focus(); // Фокус на модальне вікно для доступності
-            }
-        }
-
-        // Функція для закриття модального вікна
-        function closeModal(modalId) {
-            const modalOverlay = document.getElementById(modalId);
-            if (modalOverlay) {
-                modalOverlay.classList.remove('show'); // Видаляємо клас для приховування
-                modalOverlay.setAttribute('aria-hidden', 'true');
-            }
-        }
-
-        // Обробники подій для кнопок відкриття модальних вікон
-        document.getElementById('rulesBtn').addEventListener('click', () => {
-            openModal('rulesModal');
-            if (gameStarted && !paused) {
-                togglePause();
-            }
-        });
-
-        document.getElementById('settingsBtn').addEventListener('click', () => {
-            openModal('settingsModal');
-            if (gameStarted && !paused) {
-                togglePause();
-            }
-        });
-
-        document.getElementById('controlsBtn').addEventListener('click', () => {
-            closeModal('settingsModal'); // Закриваємо налаштування перед відкриттям управління
-            openModal('controlsModal');
-        });
-
-        // Обробники подій для кнопок закриття модальних вікон
-        document.querySelectorAll('.modal-overlay .close-btn').forEach(btn => {
-            btn.addEventListener('click', (event) => {
-                const modalOverlay = event.target.closest('.modal-overlay');
-                if (modalOverlay) {
-                    closeModal(modalOverlay.id);
-                    if (gameStarted && paused) {
-                        togglePause();
-                    }
-                }
-            });
-        });
-
-        document.getElementById('controlsBackBtn').addEventListener('click', () => {
-            closeModal('controlsModal');
-            openModal('settingsModal');
-        });
-
-        // Закриття модалок по кліку поза їх вмістом
-        document.querySelectorAll('.modal-overlay').forEach(overlay => {
-            overlay.addEventListener('click', (event) => {
-                if (event.target === overlay) {
-                    closeModal(overlay.id);
-                    if (gameStarted && paused) {
-                        togglePause();
-                    }
-                }
-            });
-        });
-
-        // Обробка PWA модального вікна
-        installButton.addEventListener('click', () => {
-            openModal('installModalOverlay');
-            if (gameStarted && !paused) {
-                togglePause();
-            }
-        });
-
-        closeInstallModalBtn.addEventListener('click', () => {
-            closeModal('installModalOverlay');
-            if (gameStarted && paused) {
-                togglePause();
-            }
-        });
-
-        // --- Кінець виправлень для модальних вікон ---
-        
+        // Функція для ініціалізації НОВОЇ гри
         function setupNewGame() {
-            startBtn.classList.add('animate');
-            
-            setTimeout(() => {
-                grid.innerHTML = '';
-                tiles = [];
-                for (let i = 0; i < size * size; i++) {
-                    const tile = document.createElement("div");
-                    tile.className = "tile";
-                    tile.dataset.val = '';
-                    tile.textContent = '';
-                    grid.appendChild(tile);
-                    tiles.push(tile);
-                }
-                
-                setTimeout(() => {
-                    grid.classList.add('show');
-                    addRandomTile();
-                    setTimeout(() => {
-                        addRandomTile();
-                    }, 150);
-                }, 100);
-                
-                updateScore(0);
-                updateTileStyles();
+            grid.innerHTML = '';
+            tiles = [];
+            for (let i = 0; i < size * size; i++) {
+                const tile = document.createElement("div");
+                tile.className = "tile";
+                tile.dataset.val = '';
+                tile.textContent = '';
+                grid.appendChild(tile);
+                tiles.push(tile);
+            }
+            addRandomTile();
+            addRandomTile();
+            updateScore(0);
+            gameOverDisplay.textContent = ''; // Очищаємо текст "Гру завершено!"
+            updateTileStyles();
 
-                paused = false;
-                gameStarted = true;
-                gameOver = false;
-                updateButtonVisibility();
-                
-                setTimeout(() => {
-                    startBtn.classList.remove('animate');
-                }, 500);
-            }, 500);
+            paused = false; // Гра активна після запуску нової
+            gameStarted = true; // Гра почалася
+            gameOver = false;
+            updateButtonVisibility(); // Оновлюємо видимість кнопок
         }
 
+        // Функція для продовження гри після паузи
         function continueGame() {
-            if (gameStarted && !gameOver) {
-                paused = false;
-                updateButtonVisibility();
-            }
+            if (gameOver || !gameStarted) return; // Не можна продовжувати завершену або не почату гру
+            paused = false;
+            updateButtonVisibility(); // Оновлюємо видимість кнопок
         }
 
+        // Функція для постановки гри на паузу
         function pauseGame() {
-            if (gameStarted && !gameOver) {
-                paused = true;
-                updateButtonVisibility();
-            }
-        }
-
-        function togglePause() {
-            if (gameStarted && !gameOver) {
-                paused ? continueGame() : pauseGame();
-            }
+            if (gameOver || !gameStarted) return; // Не можна ставити на паузу завершену або не почату гру
+            paused = true;
+            updateButtonVisibility(); // Оновлюємо видимість кнопок
         }
 
         function addRandomTile() {
@@ -1031,10 +435,6 @@
             if (empty.length === 0) return;
             const tile = empty[Math.floor(Math.random() * empty.length)];
             tile.textContent = Math.random() < 0.9 ? 2 : 4;
-            tile.classList.add('appear');
-            setTimeout(() => {
-                tile.classList.remove('appear');
-            }, 300);
             updateTileStyles();
         }
 
@@ -1061,7 +461,7 @@
         }
 
         function move(dir) {
-            if (paused || gameOver) return;
+            if (paused || gameOver) return; // Якщо гра на паузі або завершена, рух не відбувається
             let moved = false;
 
             if (dir === 'up' || dir === 'down') {
@@ -1079,13 +479,7 @@
                         const i = row * size + col;
                         const prev = tiles[i].textContent;
                         tiles[i].textContent = merged[row] || '';
-                        if (prev !== tiles[i].textContent && tiles[i].textContent !== '') {
-                            moved = true;
-                            tiles[i].classList.add('merge');
-                            setTimeout(() => {
-                                tiles[i].classList.remove('merge');
-                            }, 300);
-                        }
+                        if (prev !== tiles[i].textContent) moved = true;
                     }
                 }
             } else {
@@ -1103,41 +497,42 @@
                         const i = row * size + col;
                         const prev = tiles[i].textContent;
                         tiles[i].textContent = merged[col] || '';
-                        if (prev !== tiles[i].textContent && tiles[i].textContent !== '') {
-                            moved = true;
-                            tiles[i].classList.add('merge');
-                            setTimeout(() => {
-                                tiles[i].classList.remove('merge');
-                            }, 300);
-                        }
+                        if (prev !== tiles[i].textContent) moved = true;
                     }
                 }
             }
 
             if (moved) {
-                setTimeout(() => {
-                    addRandomTile();
-                    updateTileStyles();
-                    if (isGameOver()) {
-                        gameOver = true;
-                        paused = true;
-                        gameStarted = false;
-                        updateButtonVisibility();
-                    }
-                }, 300);
+                addRandomTile();
+                updateTileStyles();
+                if (isGameOver()) showGameOver();
             }
         }
 
         function isGameOver() {
+            // Перевіряємо на виграш (2048 плитка) - це також завершення гри
+            if (tiles.some(tile => parseInt(tile.textContent) === 2048)) {
+                // gameOverDisplay.textContent = translations[currentLang]['winMessage']; // Можна додати повідомлення про виграш, якщо потрібно
+                return true;
+            }
+
             const copy = tiles.map(t => parseInt(t.textContent) || 0);
             for (let i = 0; i < size * size; i++) {
-                if (copy[i] === 0) return false;
+                if (copy[i] === 0) return false; // Є порожні клітинки
                 const x = i % size;
                 const y = Math.floor(i / size);
-                if (x < size - 1 && copy[i] === copy[i + 1]) return false;
-                if (y < size - 1 && copy[i] === copy[i + size]) return false;
+                if (x < size - 1 && copy[i] === copy[i + 1]) return false; // Є можливі ходи по горизонталі
+                if (y < size - 1 && copy[i] === copy[i + size]) return false; // Є можливі ходи по вертикалі
             }
-            return true;
+            return true; // Немає порожніх клітинок і немає можливих ходів
+        }
+
+        function showGameOver() {
+            // gameOverDisplay.textContent = translations[currentLang]['gameOverMessage']; // Цей рядок прибрано!
+            gameOver = true; // Встановлюємо статус "гра завершена"
+            paused = true; // Ставимо гру на паузу
+            gameStarted = false; // Гра більше не вважається "початою" (для управління кнопками)
+            updateButtonVisibility(); // Оновлюємо видимість кнопок
         }
 
         function updateScore(score = 0) {
@@ -1148,59 +543,26 @@
             bestDisplay.textContent = best;
         }
 
-        // Обробка клавіш
+        // Обробник натискання клавіш
         document.addEventListener("keydown", e => {
-            if (e.key === " ") { // Пробіл для паузи
-                togglePause();
-                e.preventDefault(); // Запобігаємо прокрутці сторінки
-                return;
-            }
-            
             if (paused || gameOver) return;
-            
-            switch(e.key) {
-                case "ArrowUp":
-                case "w":
-                case "W":
-                    move("up");
-                    break;
-                case "ArrowDown":
-                case "s":
-                case "S":
-                    move("down");
-                    break;
-                case "ArrowLeft":
-                case "a":
-                case "A":
-                    move("left");
-                    break;
-                case "ArrowRight":
-                case "d":
-                case "D":
-                    move("right");
-                    break;
-            }
+            if (e.key === "ArrowUp" || e.key === "w" || e.key === "W") move("up");
+            if (e.key === "ArrowDown" || e.key === "s" || e.key === "S") move("down");
+            if (e.key === "ArrowLeft" || e.key === "a" || e.key === "A") move("left");
+            if (e.key === "ArrowRight" || e.key === "d" || e.key === "D") move("right");
         });
 
-        // Обробка свайпів
+        // Підтримка свайпів
         let startX, startY;
         document.addEventListener("touchstart", e => {
-            if (paused || gameOver) return;
-            // Перевіряємо, чи торкання не відбулося в межах модального вікна
-            if (e.target.closest('.modal-overlay')) {
-                return;
-            }
+            if (paused || gameOver) return; // Не реагуємо на свайпи, якщо гра на паузі/завершена
             const touch = e.touches[0];
             startX = touch.clientX;
             startY = touch.clientY;
         });
 
         document.addEventListener("touchend", e => {
-            if (paused || gameOver) return;
-            // Перевіряємо, чи торкання не відбулося в межах модального вікна
-            if (e.target.closest('.modal-overlay')) {
-                return;
-            }
+            if (paused || gameOver) return; // Не реагуємо на свайпи, якщо гра на паузі/завершена
             const touch = e.changedTouches[0];
             const dx = touch.clientX - startX;
             const dy = touch.clientY - startY;
@@ -1213,196 +575,307 @@
             }
         });
 
-        // Ініціалізація модалок
+        // JS для кнопок та модалок
         const rulesBtn = document.getElementById('rulesBtn');
         const settingsBtn = document.getElementById('settingsBtn');
         const controlsBtn = document.getElementById('controlsBtn');
+
         const rulesModal = document.getElementById('rulesModal');
         const settingsModal = document.getElementById('settingsModal');
         const controlsModal = document.getElementById('controlsModal');
+
         const langBtn = document.getElementById('langBtn');
         const langPopup = document.getElementById('langPopup');
+
         const themeBtn = document.getElementById('themeBtn');
         const themePopup = document.getElementById('themePopup');
+
         const controlsBackBtn = document.getElementById('controlsBackBtn');
 
-        // Функції для відкриття/закриття модалок
-        function openModal(modalElement) {
-            modalElement.style.display = 'flex';
-            if (gameStarted && !gameOver) { // Тільки якщо гра вже йде
-                pauseGame(); // Пауза гри при відкритті будь-якої модалки
+        // Мовні словники
+        const translations = {
+            uk: {
+                gameTitle: "NoneUp",
+                scoreLabel: "Очки",
+                bestLabel: "Рекорд",
+                startButton: "Грати", // Для початку нової гри (нижня кнопка)
+                playButtonTitle: "Продовжити", // Title для верхньої кнопки Play
+                pauseButtonTitle: "Пауза", // Title для верхньої кнопки Pause
+                gameOverMessage: "Гру завершено!", // Залишено, якщо ви захочете повернути це повідомлення
+                winMessage: "Ви виграли!🎉",
+                rulesButton: "Правила",
+                settingsButtonTitle: "Налаштування",
+                rulesTitle: "Правила гри 2048",
+                pcLabel: "На ПК:",
+                pcControls: "керуй грою за допомогою стрілок: ← ↑ → ↓ або WASD.",
+                phoneLabel: "На телефоні:",
+                phoneControls: "керуй грою свайпами вгору, вниз, вліво та вправо.",
+                gameGoal: "З'єднуй однакові числа, щоб отримати 2048 і виграти гру!",
+                settingsTitle: "Налаштування",
+                controlsButton: "Управління",
+                languageButton: "Мова ▼",
+                themeButton: "Тема ▼",
+                darkTheme: "Темна тема",
+                lightTheme: "Світла тема",
+                controlsTitle: "Управління",
+                arrows: "Стрілки: ← ↑ → ↓",
+                swipes: "Свайпи вгору, вниз, вліво, вправо",
+                closeButton: "Закрити",
+                backButton: "Повернутися",
+            },
+            en: {
+                gameTitle: "NoneUp",
+                scoreLabel: "Score",
+                bestLabel: "Best",
+                startButton: "Play",
+                playButtonTitle: "Continue",
+                pauseButtonTitle: "Pause",
+                gameOverMessage: "Game Over!",
+                winMessage: "You won!🎉",
+                rulesButton: "Rules",
+                settingsButtonTitle: "Settings",
+                rulesTitle: "2048 Game Rules",
+                pcLabel: "On PC:",
+                pcControls: "control the game using arrow keys: ← ↑ → ↓ or WASD.",
+                phoneLabel: "On Phone:",
+                phoneControls: "control the game with swipes up, down, left, and right.",
+                gameGoal: "Combine identical numbers to get 2048 and win the game!",
+                settingsTitle: "Settings",
+                controlsButton: "Controls",
+                languageButton: "Language ▼",
+                themeButton: "Theme ▼",
+                darkTheme: "Dark Theme",
+                lightTheme: "Light Theme",
+                controlsTitle: "Controls",
+                arrows: "Arrows: ← ↑ → ↓",
+                swipes: "Swipes up, down, left, right",
+                closeButton: "Close",
+                backButton: "Back",
+            },
+            ja: {
+                gameTitle: "NoneUp",
+                scoreLabel: "スコア",
+                bestLabel: "最高記録",
+                startButton: "プレイ",
+                playButtonTitle: "続行",
+                pauseButtonTitle: "一時停止",
+                gameOverMessage: "ゲームオーバー！",
+                winMessage: "勝利しました！🎉",
+                rulesButton: "ルール",
+                settingsButtonTitle: "設定",
+                rulesTitle: "2048ゲームのルール",
+                pcLabel: "PCで:",
+                pcControls: "矢印キー: ← ↑ → ↓ または WASD でゲームを操作します。",
+                phoneLabel: "スマートフォンで:",
+                phoneControls: "上下左右にスワイプしてゲームを操作します。",
+                gameGoal: "同じ数字を結合して2048を作り、ゲームに勝利しましょう！",
+                settingsTitle: "設定",
+                controlsButton: "操作方法",
+                languageButton: "言語 ▼",
+                themeButton: "テーマ ▼",
+                darkTheme: "ダークテーマ",
+                lightTheme: "ライトテーマ",
+                controlsTitle: "操作方法",
+                arrows: "矢印: ← ↑ → ↓",
+                swipes: "上下左右のスワイプ",
+                closeButton: "閉じる",
+                backButton: "戻る",
+            },
+            zh: {
+                gameTitle: "NoneUp",
+                scoreLabel: "分数",
+                bestLabel: "最高分",
+                startButton: "开始",
+                playButtonTitle: "继续",
+                pauseButtonTitle: "暂停",
+                gameOverMessage: "游戏结束！",
+                winMessage: "你赢了！🎉",
+                rulesButton: "规则",
+                settingsButtonTitle: "设置",
+                rulesTitle: "2048游戏规则",
+                pcLabel: "在电脑上:",
+                pcControls: "使用方向键：← ↑ → ↓ 或 WASD 控制游戏。",
+                phoneLabel: "在手机上:",
+                phoneControls: "向上、向下、向左、向右滑动屏幕来控制游戏。",
+                gameGoal: "合并相同的数字以达到2048并赢得游戏！",
+                settingsTitle: "设置",
+                controlsButton: "控制",
+                languageButton: "语言 ▼",
+                themeButton: "主题 ▼",
+                darkTheme: "深色主题",
+                lightTheme: "浅色主题",
+                controlsTitle: "控制",
+                arrows: "方向键：← ↑ → ↓",
+                swipes: "向上、向下、向左、向右滑动",
+                closeButton: "关闭",
+                backButton: "返回",
             }
-        }
+        };
 
-        function closeModal(modalElement) {
-            modalElement.style.display = 'none';
-            if (gameStarted && !gameOver && modalElement.id !== 'installModalOverlay') { // Не продовжувати, якщо закриваємо модалку встановлення після успіху
-                continueGame(); // Продовжити гру при закритті модалки (крім модалки встановлення)
-            }
-        }
+        let currentLang = 'uk'; // Мова за замовчуванням
 
-        // Обробники кліків для кнопок відкриття модалок
-        rulesBtn.addEventListener('click', () => openModal(rulesModal));
-        settingsBtn.addEventListener('click', () => openModal(settingsModal));
-        controlsBtn.addEventListener('click', () => {
-            closeModal(settingsModal); // Закриваємо налаштування перед відкриттям управління
-            openModal(controlsModal);
-        });
-        controlsBackBtn.addEventListener('click', () => {
-            closeModal(controlsModal); // Закриваємо управління
-            openModal(settingsModal); // Відкриваємо налаштування назад
-        });
-
-        // Обробники кліків для кнопок закриття модалок (на X)
-        document.querySelectorAll('.modal .close-btn').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                closeModal(e.target.closest('.modal-overlay'));
-            });
-        });
-
-        // Обробники кліків для вибору мови
-        langBtn.addEventListener('click', (e) => {
-            e.stopPropagation(); // Запобігти закриттю попапу, якщо клікнуто на кнопку
-            langPopup.style.display = langPopup.style.display === 'flex' ? 'none' : 'flex';
-            themePopup.style.display = 'none'; // Закрити інший попап
-        });
-
-        document.querySelectorAll('#langPopup button').forEach(button => {
-            button.addEventListener('click', () => {
-                const selectedLang = button.dataset.lang;
-                currentLang = selectedLang;
-                localStorage.setItem('lang', currentLang);
-                applyTranslations(currentLang);
-                langPopup.style.display = 'none'; // Закрити попап після вибору
-            });
-        });
-
-        // Обробники кліків для вибору теми
-        themeBtn.addEventListener('click', (e) => {
-            e.stopPropagation(); // Запобігти закриттю попапу, якщо клікнуто на кнопку
-            themePopup.style.display = themePopup.style.display === 'flex' ? 'none' : 'flex';
-            langPopup.style.display = 'none'; // Закрити інший попап
-        });
-
-        document.querySelectorAll('#themePopup button').forEach(button => {
-            button.addEventListener('click', () => {
-                const selectedTheme = button.dataset.theme;
-                applyTheme(selectedTheme);
-                themePopup.style.display = 'none'; // Закрити попап після вибору
-            });
-        });
-
-        // Закрити попапи, якщо клікнути десь поза ними
-        document.addEventListener('click', (e) => {
-            if (!langBtn.contains(e.target) && !langPopup.contains(e.target)) {
-                langPopup.style.display = 'none';
-            }
-            if (!themeBtn.contains(e.target) && !themePopup.contains(e.target)) {
-                themePopup.style.display = 'none';
-            }
-        });
-
-        // Обробник для кнопки "Грати"
-        startBtn.addEventListener('click', () => {
-            setupNewGame();
-        });
-
-        // Обробник для кнопки "Продовжити/Пауза" у верхньому лівому куті
-        playPauseBtnTop.addEventListener('click', togglePause);
-
-        // Обробник для кнопки "Продовжити" в модалці паузи
-        continueBtn.addEventListener('click', continueGame);
-
-        // PWA логіка
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            installButton.style.display = 'flex'; // Показуємо кнопку "Встановити" у верхньому лівому куті
-            // Не показуємо модалку автоматично, чекаємо на клік користувача
-        });
-
-        // Обробник кліку для кнопки встановлення PWA (у верхньому лівому куті)
-        installButton.addEventListener('click', () => {
-            if (deferredPrompt) {
-                showInstallModal('prompt'); // Показуємо модалку із закликом до встановлення
-            } else {
-                showInstallModal('unable'); // Якщо prompt недоступний, показуємо повідомлення про неможливість
-            }
-        });
-
-        // Обробник кліку для кнопки "Встановити" всередині модалки
-        pwaInstallBtn.addEventListener('click', async () => {
-            if (deferredPrompt) {
-                pwaInstallBtn.style.display = 'none'; // Приховуємо кнопку під час встановлення
-                installMessage.textContent = ''; // Очищаємо попереднє повідомлення
-
-                deferredPrompt.prompt();
-                const { outcome } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') {
-                    console.log('User accepted the A2HS prompt');
-                    showInstallModal('success'); // Показуємо повідомлення про успіх
-                } else {
-                    console.log('User dismissed the A2HS prompt');
-                    hideInstallModal(); // Закриваємо модалку, якщо користувач відхилив
+        // Функція для оновлення тексту на сторінці
+        function updateTextsForLanguage() {
+            document.querySelectorAll('[data-lang-key]').forEach(element => {
+                const key = element.getAttribute('data-lang-key');
+                if (translations[currentLang] && translations[currentLang][key]) {
+                    element.textContent = translations[currentLang][key];
                 }
-                deferredPrompt = null; // Використали prompt, скидаємо його
-            }
-        });
+            });
 
-        // Обробник для закриття модалки встановлення PWA
-        closeInstallModalBtn.addEventListener('click', hideInstallModal);
-
-        // Функція для відображення модалки встановлення з відповідним повідомленням
-        function showInstallModal(messageType) {
-            installModalOverlay.style.display = 'flex';
-            installMessage.dataset.messageType = messageType; // Встановлюємо тип повідомлення
+            // Оновлюємо атрибути title для верхніх кнопок
+            settingsBtn.title = translations[currentLang]['settingsButtonTitle'];
+            // playPauseBtnTop.title оновлюється всередині updateButtonVisibility()
             
-            // Оновлюємо видимість кнопки та текст повідомлення
-            // Тут використовуємо порожні рядки для "prompt" та "description"
-            if (messageType === 'prompt') {
-                pwaInstallBtn.style.display = 'block';
-                installMessage.textContent = translations[currentLang].installMessagePrompt; // Тепер буде порожнім
-            } else if (messageType === 'unable') {
-                pwaInstallBtn.style.display = 'none';
-                installMessage.textContent = translations[currentLang].installMessageUnable;
-            } else if (messageType === 'success') {
-                pwaInstallBtn.style.display = 'none';
-                installMessage.textContent = translations[currentLang].installMessageSuccess;
-            }
-            // Переконайтесь, що заголовок та опис також оновлюються
-            applyTranslations(currentLang);
+            // Оновлюємо атрибут aria-label для кнопок закриття
+            // controlsBackBtn тепер не має класу close-btn, тому її title обробляється окремо
+            document.querySelectorAll('.close-btn').forEach(btn => {
+                btn.setAttribute('aria-label', translations[currentLang]['closeButton']);
+            });
+            controlsBackBtn.setAttribute('aria-label', translations[currentLang]['backButton']); // Обробка для controlsBackBtn окремо
+
+
+            // Оновлюємо рекорд при зміні мови, щоб він правильно відображався
+            bestDisplay.textContent = localStorage.getItem("best") || 0;
+            updateScore(currentScore);
+            // gameOverDisplay не оновлюємо тут, його текст керується логікою гри
+
+            // Оновлюємо видимість кнопок після зміни мови, щоб title та іконки були правильні
+            updateButtonVisibility();
         }
 
-        // Функція для приховування модалки встановлення PWA
-        function hideInstallModal() {
-            installModalOverlay.style.display = 'none';
-            installMessage.textContent = ''; // Очищаємо повідомлення при закритті
-            installMessage.dataset.messageType = ''; // Скидаємо тип повідомлення
-        }
+        // === Обробники подій для кнопок Play/Pause/Start ===
 
-        // Обробник події після встановлення PWA
-        window.addEventListener('appinstalled', () => {
-            console.log('PWA was installed');
-            installButton.style.display = 'none'; // Приховуємо кнопку "Встановити" у верхньому лівому куті
-            hideInstallModal(); // Закриваємо модалку, якщо вона була відкрита
+        // Обробник для великої кнопки "Грати" (внизу)
+        startBtn.addEventListener('click', () => {
+            setupNewGame(); // Завжди починає нову гру
         });
 
-        // Ініціалізація при завантаженні сторінки
-        document.addEventListener('DOMContentLoaded', () => {
-            applyTranslations(currentLang); // Застосувати переклади
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme) {
-                applyTheme(savedTheme); // Застосувати збережену тему
+        // Обробник для верхньої кнопки Play/Pause
+        playPauseBtnTop.addEventListener('click', () => {
+            if (paused) {
+                continueGame(); // Якщо на паузі, продовжуємо
             } else {
-                applyTheme('dark'); // Тема за замовчуванням
+                pauseGame(); // Якщо граємо, ставимо на паузу
             }
-            updateScore(0); // Оновити рекорд при завантаженні
-            updateButtonVisibility(); // Оновити видимість кнопок після застосування мови
-            // Початкове приховання кнопки PWA, якщо deferredPrompt ще не спрацював
-            if (!deferredPrompt) {
-                installButton.style.display = 'none';
+        });
+        // =======================================================
+
+
+        // Встановлюємо початкову мову та видимість кнопок при завантаженні сторінки
+        updateTextsForLanguage();
+        // setupNewGame() не викликаємо тут, щоб гра не починалася автоматично
+
+
+        // === Обробники подій для модалок ===
+
+        // Функція для закриття всіх основних модалок
+        function closeAllModals() {
+            rulesModal.style.display = 'none';
+            settingsModal.style.display = 'none';
+            controlsModal.style.display = 'none';
+        }
+
+        // Функція для закриття всіх міні-попапів (мова, тема)
+        function closeAllPopups() {
+            langPopup.style.display = 'none';
+            themePopup.style.display = 'none';
+        }
+
+        // Відкриття Правил
+        rulesBtn.onclick = () => {
+            closeAllModals(); // Закриваємо всі основні модалки
+            closeAllPopups(); // Закриваємо всі міні-попапи
+            rulesModal.style.display = 'flex';
+        };
+
+        // Відкриття Налаштувань
+        settingsBtn.onclick = () => {
+            closeAllModals(); // Закриваємо всі основні модалки
+            closeAllPopups(); // Закриваємо всі міні-попапи
+            settingsModal.style.display = 'flex';
+        };
+
+        // Відкриття Управління з Налаштувань
+        controlsBtn.onclick = () => {
+            closeAllPopups(); // Закриваємо міні-попапи, якщо відкриті
+            settingsModal.style.display = 'none';
+            controlsModal.style.display = 'flex';
+        };
+
+        // Повернення з Управління до Налаштувань
+        controlsBackBtn.onclick = (e) => {
+            e.stopPropagation(); // Важливо: зупиняємо поширення події, щоб не закрити батьківську модалку
+            controlsModal.style.display = 'none';
+            settingsModal.style.display = 'flex';
+        };
+
+        // Закриття по кнопках закриття (хрестики) - ТЕПЕР ТІЛЬКИ ДЛЯ СПРАВЖНІХ ХРЕСТИКІВ
+        document.querySelectorAll('.close-btn').forEach(btn => {
+            btn.onclick = e => {
+                e.target.closest('.modal-overlay').style.display = 'none';
+                closeAllPopups(); // Закриваємо міні-попапи при закритті основних модалок
+            };
+        });
+
+        // Закриття по кліку поза модалкою
+        [rulesModal, settingsModal, controlsModal].forEach(modal => {
+            modal.onclick = e => {
+                if(e.target === modal) {
+                    modal.style.display = 'none';
+                    closeAllPopups(); // Закриваємо міні-попапи, якщо клацнули поза модалкою
+                }
+            };
+        });
+
+        // Показ/приховання міні-меню (Мова, Тема)
+        langBtn.onclick = e => {
+            e.stopPropagation(); // Зупиняємо поширення, щоб клік по кнопці не закрив попап одразу
+            if (langPopup.style.display === 'flex') {
+                langPopup.style.display = 'none';
+            } else {
+                closeAllPopups(); // Закриваємо інші попапи (якщо є)
+                langPopup.style.display = 'flex';
             }
+        };
+
+        themeBtn.onclick = e => {
+            e.stopPropagation(); // Зупиняємо поширення, щоб клік по кнопці не закрив попап одразу
+            if (themePopup.style.display === 'flex') {
+                themePopup.style.display = 'none';
+            } else {
+                closeAllPopups(); // Закриваємо інші попапи (якщо є)
+                themePopup.style.display = 'flex';
+            }
+        };
+
+        // Закрити міні-меню при кліку поза ними
+        document.body.addEventListener('click', () => {
+            closeAllPopups();
+        });
+
+        // Обробка вибору мови
+        langPopup.querySelectorAll('button').forEach(btn => {
+            btn.onclick = e => {
+                currentLang = e.target.getAttribute('data-lang');
+                updateTextsForLanguage(); // Викликаємо функцію для оновлення всіх текстів
+                closeAllPopups(); // Закриваємо попап мови
+            };
+        });
+
+        // Обробка вибору теми
+        themePopup.querySelectorAll('button').forEach(btn => {
+            btn.onclick = e => {
+                const theme = e.target.getAttribute('data-theme');
+                if(theme === 'light') {
+                    document.body.classList.add('light');
+                } else {
+                    document.body.classList.remove('light');
+                }
+                closeAllPopups(); // Закриваємо попап теми
+            };
         });
     </script>
+
 </body>
 </html>
