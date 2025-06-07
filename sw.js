@@ -1,11 +1,11 @@
-const CACHE_NAME = 'NoneUp';
+const CACHE_NAME = 'noneup-v1';
 const urlsToCache = [
   '/',
   '/index.html',
   '/style.css',
   '/logo.jpg', // Якщо використовуєте його для іконок
-  '/logo-192x192.png', // Якщо створили
-  '/logo-512x512.png', // Якщо створили
+  '/logo.jpg', // Якщо створили
+  '/logo.jpg', // Якщо створили
   'https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap'
   // Додайте всі інші ресурси, які сайт потребує для офлайн роботи
 ];
