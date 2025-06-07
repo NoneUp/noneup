@@ -19,9 +19,3 @@
     }
   ]
 }
-
-{
-  "name": "My App",
-  "display": "standalone",
-  "orientation": "landscape"
-}
