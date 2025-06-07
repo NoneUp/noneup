@@ -881,6 +881,94 @@
             }
         }
 
+         // --- Виправлення для модальних вікон ---
+
+        // Функція для відкриття модального вікна
+        function openModal(modalId) {
+            const modalOverlay = document.getElementById(modalId);
+            if (modalOverlay) {
+                modalOverlay.classList.add('show'); // Додаємо клас для відображення
+                modalOverlay.setAttribute('aria-hidden', 'false');
+                modalOverlay.focus(); // Фокус на модальне вікно для доступності
+            }
+        }
+
+        // Функція для закриття модального вікна
+        function closeModal(modalId) {
+            const modalOverlay = document.getElementById(modalId);
+            if (modalOverlay) {
+                modalOverlay.classList.remove('show'); // Видаляємо клас для приховування
+                modalOverlay.setAttribute('aria-hidden', 'true');
+            }
+        }
+
+        // Обробники подій для кнопок відкриття модальних вікон
+        document.getElementById('rulesBtn').addEventListener('click', () => {
+            openModal('rulesModal');
+            if (gameStarted && !paused) {
+                togglePause();
+            }
+        });
+
+        document.getElementById('settingsBtn').addEventListener('click', () => {
+            openModal('settingsModal');
+            if (gameStarted && !paused) {
+                togglePause();
+            }
+        });
+
+        document.getElementById('controlsBtn').addEventListener('click', () => {
+            closeModal('settingsModal'); // Закриваємо налаштування перед відкриттям управління
+            openModal('controlsModal');
+        });
+
+        // Обробники подій для кнопок закриття модальних вікон
+        document.querySelectorAll('.modal-overlay .close-btn').forEach(btn => {
+            btn.addEventListener('click', (event) => {
+                const modalOverlay = event.target.closest('.modal-overlay');
+                if (modalOverlay) {
+                    closeModal(modalOverlay.id);
+                    if (gameStarted && paused) {
+                        togglePause();
+                    }
+                }
+            });
+        });
+
+        document.getElementById('controlsBackBtn').addEventListener('click', () => {
+            closeModal('controlsModal');
+            openModal('settingsModal');
+        });
+
+        // Закриття модалок по кліку поза їх вмістом
+        document.querySelectorAll('.modal-overlay').forEach(overlay => {
+            overlay.addEventListener('click', (event) => {
+                if (event.target === overlay) {
+                    closeModal(overlay.id);
+                    if (gameStarted && paused) {
+                        togglePause();
+                    }
+                }
+            });
+        });
+
+        // Обробка PWA модального вікна
+        installButton.addEventListener('click', () => {
+            openModal('installModalOverlay');
+            if (gameStarted && !paused) {
+                togglePause();
+            }
+        });
+
+        closeInstallModalBtn.addEventListener('click', () => {
+            closeModal('installModalOverlay');
+            if (gameStarted && paused) {
+                togglePause();
+            }
+        });
+
+        // --- Кінець виправлень для модальних вікон ---
+        
         function setupNewGame() {
             startBtn.classList.add('animate');
             
