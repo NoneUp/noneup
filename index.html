@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uk">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -12,29 +12,95 @@
 <body>
 
     <div id="topButtons">
-        <button id="playPauseBtnTop" class="top-btn" title="Play/Pause"><span aria-hidden="true"></span></button>
+        <button id="installButton" class="top-btn" title="Встановити">⏏</button>
+        <button id="rulesBtn" class="top-btn" data-lang-key="rulesButton">Правила</button>
+        <button id="settingsBtn" class="top-btn" title="Налаштування"><span aria-hidden="true">⚙︎</span></button>
+        <button id="playPauseBtnTop" class="top-btn" title="Продовжити/Пауза"><span aria-hidden="true"></span></button>
+        
+        <div id="installModalOverlay" class="modal-overlay">
+            <div class="modal">
+                <button class="close-btn" id="closeInstallModalBtn" aria-label="Закрити">&times;</button>
+                <h2 data-lang-key="installModalTitle">Встановити додаток</h2>
+                <p data-lang-key="installModalDescription"></p> 
+                <div class="modal-actions">
+                    <button id="pwaInstallBtn" class="btn" style="display: none;" data-lang-key="installButtonText">Встановити</button>
+                    <p id="installMessage" style="margin-top: 0;"></p> 
+                </div>
+            </div>
+        </div>
     </div>
 
-    <h1>NoneUp</h1>
-    <div class="info">Score: <span id="score">0</span> | Best: <span id="best">0</span></div>
+    <h1 data-lang-key="gameTitle">2048 NoneUp</h1>
+    <div class="info"><span data-lang-key="scoreLabel">Очки</span>: <span id="score">0</span> | <span data-lang-key="bestLabel">Рекорд</span>: <span id="best">0</span></div>
     
     <div class="grid-container">
         <div class="grid" id="grid"></div>
     </div>
     
-    <button class="btn" id="start">
-        <span class="btn-text">Play</span>
+    <button class="btn" id="start" data-lang-key="startButton">
+        <span class="btn-text">Грати</span>
         <span class="play-line"></span>
     </button>
 
     <div id="pauseOverlay" class="pause-overlay">
         <div class="pause-content">
-            <h2>Game Paused</h2>
-            <p>Press the "Continue" button or spacebar</p>
-            <button id="continueBtn" class="btn" style="margin-top: 15px;">Continue</button>
+            <h2 data-lang-key="pauseTitle">Гра на паузі</h2>
+            <p data-lang-key="pauseDescription">Натисніть кнопку "Продовжити" або клавішу пробілу</p>
+            <button id="continueBtn" class="btn" style="margin-top: 15px;" data-lang-key="continueButton">Продовжити</button>
         </div>
     </div>
 
+    <div id="rulesModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="rulesTitle">
+        <div class="modal">
+            <button class="close-btn" aria-label="Закрити">&times;</button>
+            <h2 id="rulesTitle" data-lang-key="rulesTitle">Правила гри 2048</h2>
+            <p><strong data-lang-key="pcLabel">На ПК:</strong> <span data-lang-key="pcControls">керуй грою за допомогою стрілок: ← ↑ → ↓ або WASD.</span></p>
+            <p><strong data-lang-key="phoneLabel">На телефоні:</strong> <span data-lang-key="phoneControls">керуй грою свайпами вгору, вниз, вліво та вправо.</span></p>
+            <p><span data-lang-key="gameGoal">З'єднуй однакові числа, щоб отримати 2048!</span></p>
+        </div>
+    </div>
+
+    <div id="settingsModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
+        <div class="modal">
+            <button class="close-btn" aria-label="Закрити">&times;</button>
+            <h2 id="settingsTitle" data-lang-key="settingsTitle">Налаштування</h2>
+            <button id="controlsBtn" class="btn" style="margin-top: 15px;" data-lang-key="controlsButton">Управління</button>
+            <div class="setting-options" style="margin-top: 20px;"> <div style="position: relative; margin-bottom: 15px;">
+                    <button id="langBtn" class="top-btn" data-lang-key="languageButton">Мова ▼</button>
+                    <div id="langPopup" class="mini-popup" role="listbox" aria-label="Вибір мови">
+                        <button data-lang="zh">中文 (Китайська)</button>
+                        <button data-lang="uk">Українська</button>
+                        <button data-lang="ja">日本語 (Японська)</button>
+                        <button data-lang="en">English</button>
+                    </div>
+                </div>
+                <div style="position: relative;">
+                    <button id="themeBtn" class="top-btn" data-lang-key="themeButton">Тема ▼</button>
+                    <div id="themePopup" class="mini-popup" role="listbox" aria-label="Вибір теми">
+                        <button data-theme="dark" data-lang-key="darkTheme">Темна тема</button>
+                        <button data-theme="light" data-lang-key="lightTheme">Світла тема</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="controlsModal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="controlsTitle">
+        <div class="modal">
+            <button id="controlsBackBtn" aria-label="Повернутися">←</button>
+            <h2 id="controlsTitle" data-lang-key="controlsTitle">Управління</h2>
+            <p><strong data-lang-key="pcLabel">ПК:</strong></p>
+            <ul>
+                <li><span data-lang-key="arrows">Стрілки: ← ↑ → ↓</span></li>
+                <li>WASD: <span data-lang-key="wasdControls">альтернативне управління</span></li>
+                <li><span data-lang-key="spacePause">Пробіл: пауза</span></li>
+            </ul>
+            <p><strong data-lang-key="phoneLabel">Телефон:</strong></p>
+            <ul>
+                <li><span data-lang-key="swipes">Свайпи вгору, вниз, вліво, вправо</span></li>
+            </ul>
+        </div>
+    </div>
 <script src="script.js"></script>
 </body>
 </html>
