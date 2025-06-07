@@ -1,3 +1,4 @@
+/* Base Styles - These styles apply by default (good for PC/larger screens) */
 body {
     font-family: Arial, sans-serif;
     display: flex;
@@ -7,6 +8,9 @@ body {
     margin: 0;
     background-color: #faf8ef;
     color: #776e65;
+    padding: 20px; /* More padding for larger screens */
+    box-sizing: border-box;
+    overflow-x: hidden; /* Prevent horizontal scroll on very small screens */
 }
 
 .game-container {
@@ -16,11 +20,15 @@ body {
     position: relative;
     box-shadow: 0 0 20px rgba(0,0,0,0.2);
     text-align: center;
+    max-width: 500px; /* Keep a max width for the game on large screens */
+    width: 100%; /* Allows it to shrink on smaller screens */
+    box-sizing: border-box;
 }
 
 h1 {
     color: #776e65;
     margin-bottom: 20px;
+    font-size: 2.5em; /* Default font size for PC */
 }
 
 .scores-container {
@@ -34,41 +42,43 @@ h1 {
     padding: 10px 15px;
     border-radius: 3px;
     margin: 0 5px;
-    font-size: 1.2em;
+    font-size: 1.2em; /* Default font size for PC */
     font-weight: bold;
 }
 
 .grid-container {
     display: grid;
-    grid-template-columns: repeat(4, 100px);
-    grid-template-rows: repeat(4, 100px);
-    gap: 10px;
+    /* Default fixed sizes for PC/larger screens */
+    grid-template-columns: repeat(4, 100px); /* Fixed 100px width per column */
+    grid-template-rows: repeat(4, 100px);    /* Fixed 100px height per row */
+    gap: 10px; /* Fixed gap */
     background-color: #cdc1b4;
     padding: 10px;
     border-radius: 6px;
     margin-bottom: 20px;
-    opacity: 0; /* Hidden by default */
+    opacity: 0;
     transition: opacity 0.3s ease-in-out;
 }
 
 .grid-container.show {
-    opacity: 1; /* Show when 'show' class is added */
+    opacity: 1;
 }
 
 .tile {
-    width: 100px;
-    height: 100px;
+    width: 100px; /* Fixed width for PC */
+    height: 100px; /* Fixed height for PC */
     background-color: #eee4da;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 2.5em;
+    font-size: 2.5em; /* Default font size for PC */
     font-weight: bold;
     border-radius: 3px;
     transition: background-color 0.1s, color 0.1s, transform 0.1s;
+    box-sizing: border-box;
 }
 
-/* Tile colors - you'll need to expand this */
+/* Tile colors - (No change needed here, these are dynamic) */
 .tile[data-val="2"] { background-color: #eee4da; color: #776e65; }
 .tile[data-val="4"] { background-color: #ede0c8; color: #776e65; }
 .tile[data-val="8"] { background-color: #f2b179; color: #f9f6f2; }
@@ -78,10 +88,11 @@ h1 {
 .tile[data-val="128"] { background-color: #edcf72; color: #f9f6f2; }
 .tile[data-val="256"] { background-color: #edcc61; color: #f9f6f2; }
 .tile[data-val="512"] { background-color: #edc850; color: #f9f6f2; }
-.tile[data-val="1024"] { background-color: #edc53f; color: #f9f6f2; }
-.tile[data-val="2048"] { background-color: #edc22e; color: #f9f6f2; }
+.tile[data-val="1024"] { background-color: #edc53f; color: #f9f9f2; }
+.tile[data-val="2048"] { background-color: #edc22e; color: #f9f9f2; }
 
-/* Animations */
+
+/* Animations (No change needed here) */
 .tile.appear {
     animation: appear 0.2s ease-out;
 }
@@ -117,6 +128,8 @@ h1 {
     cursor: pointer;
     transition: background-color 0.3s ease;
     margin-top: 10px;
+    width: auto; /* Default auto width for PC buttons */
+    max-width: 200px; /* Max width for PC buttons */
 }
 
 .btn:hover {
@@ -143,11 +156,11 @@ h1 {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    font-size: 2em;
+    font-size: 2em; /* Default font size for PC */
     font-weight: bold;
     color: #776e65;
     border-radius: 6px;
-    display: none; /* Hidden by default */
+    display: none;
 }
 
 .play-pause-btn {
@@ -156,14 +169,14 @@ h1 {
     right: 15px;
     background: none;
     border: none;
-    font-size: 1.5em;
+    font-size: 1.5em; /* Default font size for PC */
     cursor: pointer;
     color: #776e65;
-    display: none; /* Hidden by default */
+    display: none;
     align-items: center;
     justify-content: center;
-    width: 40px;
-    height: 40px;
+    width: 40px; /* Default fixed size for PC */
+    height: 40px; /* Default fixed size for PC */
     border-radius: 50%;
     transition: background-color 0.2s ease;
 }
@@ -173,14 +186,120 @@ h1 {
 }
 
 .play-pause-btn span {
-    line-height: 1; /* Adjust to center the icon */
+    line-height: 1;
 }
 
-/* Icons for play/pause - you can use real icons or adjust font size */
 .play-pause-btn.play-icon span {
-    font-size: 1.8em; /* Make play icon a bit bigger */
+    font-size: 1.8em;
 }
 
 .play-pause-btn.pause-icon span {
     font-size: 1.5em;
+}
+
+/* --- Media Queries for Smaller Screens (Mobile) --- */
+/* These styles will OVERRIDE the base styles when max-width is met */
+@media (max-width: 600px) {
+    body {
+        padding: 10px; /* Less padding for smaller screens */
+    }
+
+    .game-container {
+        padding: 15px;
+        /* Ensure game container takes full width on small screens, minus body padding */
+        width: calc(100% - 20px); /* 100% viewport width minus 2*10px body padding */
+        margin: auto; /* Center it */
+    }
+
+    h1 {
+        font-size: 1.8em; /* Slightly smaller for mobile */
+        margin-bottom: 10px;
+    }
+
+    .score-board {
+        padding: 6px 10px; /* Smaller padding for scores */
+        font-size: 0.9em; /* Smaller font for scores */
+    }
+
+    .grid-container {
+        /* Calculate tile size based on available game container width */
+        /* (100% of container width - 2*padding - 3*gap) / 4 tiles */
+        --tile-size: calc((100vw - 20px - 30px - 3 * 2vw) / 4); /* Rough estimate: vw - body_padding - game_container_padding - gaps / 4 */
+        --tile-size: calc((var(--game-container-width, 100vw) - 2 * 2vw - 3 * 2vw) / 4); /* More dynamic approach */
+
+        /* Let's try simpler vw based on total screen width and reduce padding */
+        grid-template-columns: repeat(4, calc(25vw - 4vw)); /* Roughly 25% of viewport width minus some gap */
+        grid-template-rows: repeat(4, calc(25vw - 4vw));     /* Keep tiles square by matching height to vw */
+        gap: 1.5vw; /* Use viewport width for gap, slightly smaller */
+        padding: 1.5vw; /* Adjust padding for grid, also smaller */
+        margin-bottom: 15px; /* Adjust margin */
+    }
+
+    .tile {
+        font-size: 1.5em; /* Smaller font size for tiles on phones */
+        width: 100%; /* Make sure they fill their grid cell */
+        height: 100%; /* Make sure they fill their grid cell */
+    }
+    
+    /* Further reduce font size for 3 and 4 digit numbers to fit on smaller tiles */
+    .tile[data-val="128"],
+    .tile[data-val="256"],
+    .tile[data-val="512"] {
+        font-size: 1.3em;
+    }
+    .tile[data-val="1024"],
+    .tile[data-val="2048"] {
+        font-size: 1.1em; /* Even smaller for 4-digit numbers */
+    }
+
+    .btn {
+        padding: 8px 15px;
+        font-size: 1em;
+        width: 100%; /* Make buttons full width on small screens */
+        max-width: none; /* Remove max-width on mobile */
+    }
+
+    .overlay {
+        font-size: 1.2em; /* Smaller overlay text */
+    }
+
+    .play-pause-btn {
+        width: 30px; /* Slightly smaller button */
+        height: 30px;
+        font-size: 1em; /* Smaller icon size */
+        top: 8px; /* Adjust position */
+        right: 8px;
+    }
+    
+    .play-pause-btn.play-icon span {
+        font-size: 1.5em; /* Adjusted for smaller button */
+    }
+
+    .play-pause-btn.pause-icon span {
+        font-size: 1.2em; /* Adjusted for smaller button */
+    }
+}
+
+@media (max-width: 360px) {
+    /* Further adjustments for very small screens (e.g., iPhone SE) */
+    .grid-container {
+        grid-template-columns: repeat(4, calc(24vw - 4vw)); /* Tweak vw for very small screens */
+        grid-template-rows: repeat(4, calc(24vw - 4vw));
+        gap: 1.2vw;
+        padding: 1.2vw;
+    }
+
+    .tile {
+        font-size: 1.4em; /* Make tile text slightly smaller */
+    }
+    
+    .tile[data-val="128"],
+    .tile[data-val="256"],
+    .tile[data-val="512"] {
+        font-size: 1.2em;
+    }
+    .tile[data-val="1024"],
+    .tile[data-val="2048"] {
+        font-size: 1em;
+    }
 }
