@@ -288,22 +288,26 @@
             gap: 10px;
             z-index: 3000;
             animation: fadeIn 1s ease;
+            
         }
         
         .top-btn {
             background: var(--button-bg);
             border: none;
             border-radius: 8px;
-            padding: 8px 12px;
+            width: 53px;
+            height: 56px;
             color: var(--text-color);
             cursor: pointer;
-            font-size: 14px;
+            font-size: 40px;
             user-select: none;
             display: flex;
             align-items: center;
             position: relative;
             transition: all 0.3s ease;
             box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            justify-content: center;
+            padding: 0;
         }
         
         .top-btn:hover {
@@ -316,17 +320,17 @@
         }
         
         #settingsBtn {
-            font-size: 20px;
-            width: 40px;
-            height: 40px;
+            font-size: 40px;
+            width: 53px;
+            height: 56px;
             justify-content: center;
             padding: 0;
         }
         
         #playPauseBtnTop {
-            font-size: 20px;
-            width: 40px;
-            height: 40px;
+            font-size: 40px;
+            width: 53px;
+            height: 56px;
             justify-content: center;
             padding: 0;
             display: none; /* Приховуємо за замовчуванням, показуємо JS */
@@ -439,7 +443,7 @@
 
         .mini-popup {
             position: absolute;
-            top: 45px;
+            top: 65px;
             left: 0;
             background: var(--modal-bg);
             border-radius: 10px;
@@ -512,196 +516,12 @@
             width: 45%; /* Робить попап на всю ширину кнопки */
         }
 
-:root {
+        :root {
   --primary-color: #8f7a66;
   --secondary-color: #bbada0;
   --text-color: #f9f6f2;
   --tile-bg: #cdc1b4;
   --bg-color: #121212;
   --modal-bg: #222;
-  --button-bg: #444;
-}
-
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Arial', sans-serif;
-  background: var(--bg-color);
-  color: var(--text-color);
-  min-height: 100vh;
-  overflow-x: hidden;
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-  touch-action: manipulation; /* Улучшает обработку касаний */
-}
-
-body.light {
-  --primary-color: #8f7a66;
-  --secondary-color: #bbada0;
-  --text-color: #222;
-  --tile-bg: #cdc1b4;
-  --bg-color: #f5f5f5;
-  --modal-bg: #fff;
-  --button-bg: #ddd;
-}
-
-h1 { 
-  margin-bottom: 10px; 
-  font-size: clamp(2rem, 8vw, 3rem); /* Адаптивный размер */
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-  animation: fadeIn 1s ease;
-}
-
-.info { 
-  margin-bottom: 15px; 
-  font-size: clamp(1rem, 4vw, 1.2rem);
-  animation: fadeIn 1.2s ease;
-}
-
-.grid-container {
-  perspective: 1000px;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(60px, 80px));
-  grid-gap: clamp(8px, 2vw, 10px);
-  background: var(--secondary-color);
-  padding: clamp(10px, 3vw, 15px);
-  border-radius: 10px;
-  opacity: 0;
-  transform: translateY(20px) rotateX(10deg);
-  transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-}
-
-.grid.show {
-  opacity: 1;
-  transform: translateY(0) rotateX(0);
-}
-
-.tile {
-  width: 100%;
-  aspect-ratio: 1/1; /* Сохраняем квадратную форму */
-  background: var(--tile-bg);
-  font-size: clamp(1.5rem, 6vw, 2rem);
-  font-weight: bold;
-  color: #776e65;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 5px;
-  transition: all 0.2s ease;
-  position: relative;
-  overflow: hidden;
-  user-select: none;
-  -webkit-user-select: none;
-}
-
-/* Остальные стили для tile остаются без изменений */
-
-.btn {
-  margin-top: 20px;
-  padding: 12px 24px;
-  font-size: 1.1rem;
-  background: var(--primary-color);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-  animation: fadeIn 1.5s ease;
-  -webkit-tap-highlight-color: transparent; /* Убирает подсветку при тапе */
-}
-
-/* Модальные окна - ключевые изменения */
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0,0,0,0.8);
-  display: none;
-  justify-content: center;
-  align-items: center;
-  z-index: 2500;
-  padding: 20px;
-  animation: fadeIn 0.3s ease;
-  overscroll-behavior: contain; /* Предотвращает скролл фона */
-  -webkit-overflow-scrolling: touch; /* Плавный скролл на iOS */
-}
-
-.modal {
-  background: var(--modal-bg);
-  border-radius: 15px;
-  max-width: 400px;
-  width: 90%; /* Лучше адаптируется для мобильных */
-  padding: 25px;
-  position: relative;
-  box-shadow: 0 15px 30px rgba(0,0,0,0.4);
-  transform: translateY(0); /* Изменено для мобильных */
-  opacity: 0;
-  animation: modalInMobile 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  max-height: 90vh;
-  overflow-y: auto;
-}
-
-@keyframes modalInMobile {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Кнопки на мобильных */
-.top-btn {
-  -webkit-tap-highlight-color: transparent;
-  touch-action: manipulation;
-}
-
-/* Адаптация для маленьких экранов */
-@media (max-width: 500px) {
-  .grid {
-    grid-template-columns: repeat(4, minmax(50px, 1fr));
-    grid-gap: 6px;
-    padding: 8px;
-  }
-
-  .modal {
-    padding: 20px 15px;
-    width: 85%;
-  }
-
-  #topButtons {
-    top: 10px;
-    left: 10px;
-  }
-
-  .top-btn {
-    padding: 6px 10px;
-    font-size: 12px;
-  }
-
-  #settingsBtn, #playPauseBtnTop {
-    width: 36px;
-    height: 36px;
-    font-size: 18px;
-  }
-}
-
-/* Предотвращение масштабирования при фокусе на iOS */
-input, textarea, button, select, a {
-  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  --button-bg: #8f7a66;
 }
