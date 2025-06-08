@@ -153,6 +153,7 @@
         }
 
         .btn {
+            margin-top: 20px;
             padding: 12px 24px;
             font-size: 1.1rem;
             background: var(--primary-color);
@@ -432,7 +433,7 @@
 
         .mini-popup {
             position: absolute;
-            top: 50px;
+            top: 65px;
             left: 0;
             background: var(--modal-bg);
             border-radius: 10px;
