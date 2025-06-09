@@ -549,10 +549,11 @@
     function setupEventListeners() {
       // Keyboard controls
       document.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowLeft') move('left');
-        else if (e.key === 'ArrowRight') move('right');
-        else if (e.key === 'ArrowUp') move('up');
-        else if (e.key === 'ArrowDown') move('down');
+        // Arrow keys
+        if (e.key === 'ArrowLeft' || e.key.toLowerCase() === 'a') move('left');
+        else if (e.key === 'ArrowRight' || e.key.toLowerCase() === 'd') move('right');
+        else if (e.key === 'ArrowUp' || e.key.toLowerCase() === 'w') move('up');
+        else if (e.key === 'ArrowDown' || e.key.toLowerCase() === 's') move('down');
       });
       
       // Touch controls (swipe)
