@@ -186,10 +186,6 @@
       text-align: center;
     }
     
-    .win-message {
-      color: #d0d0ff;
-    }
-    
     .lose-message {
       color: #6a2a8a;
     }
@@ -239,6 +235,76 @@
         font-size: 3em;
       }
     }
+
+    .modal {
+  display: none; /* По замовчуванню приховане */
+  position: fixed;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.7);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: #1e1e1e;
+  padding: 20px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 400px;
+  max-height: 80vh;
+  overflow-y: auto;
+  color: var(--text-color);
+  position: relative;
+}
+
+.close-btn {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 1.5em;
+  cursor: pointer;
+  color: var(--text-color);
+    width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background-color: var(--button-bg);
+  transition: background-color 0.2s;
+}
+
+.close-btn:hover {
+  background-color: var(--button-hover);
+}
+
+.modal-text p {
+  margin-bottom: 1em;
+  line-height: 1.4;
+}
+
+#confirmNewGameModal .modal-content button {
+  flex: none;
+  width: 100px;
+  padding: 10px 0;
+  font-size: 1em;
+  border: none;
+  border-radius: var(--border-radius);
+  background-color: var(--button-bg);
+  color: var(--text-color);
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+#confirmNewGameModal .modal-content button:hover {
+  background-color: var(--button-hover);
+}
   </style>
 </head>
 <body>
@@ -257,9 +323,39 @@
       </div>
     </div>
     
-    <div class="controls">
-      <button id="newGameBtn">New Game</button>
+<div class="controls">
+  <button id="newGameBtn">New game</button>
+  <button id="newsBtn">News</button>
+</div>
+
+<!-- Модальне вікно -->
+<div id="newsModal" class="modal">
+  <div class="modal-content">
+    <span class="close-btn">&times;</span>
+    <div class="modal-text">
+      <h2>Last news:</h2>
+      <p></p>
+      <p>• We’ve added a News button.</p>
+      <p>• Updated the New Game button prompt.</p>
+      <p>• Removed the game over condition – now you can compete with friends indefinitely!</p>
+      <h5>Version: 1.2.0</h5>
     </div>
+  </div>
+</div>
+
+<!-- Модальне вікно підтвердження нової гри -->
+<div id="confirmNewGameModal" class="modal">
+  <div class="modal-content">
+
+    <div class="modal-text">
+      <h2>Are you sure you want to start a new game?</h2>
+      <div style="display: flex; justify-content: center; gap: 20px; margin-top: 20px;">
+        <button id="confirmNewGameBtn">Yes</button>
+        <button id="denyNewGameBtn">No</button>
+      </div>
+    </div>
+  </div>
+</div>
     
     <div id="grid">
       <div class="center-message" id="centerMessage"></div>
@@ -317,7 +413,7 @@
     // Show centered message
     function showCenterMessage(text, isWin) {
       centerMessage.textContent = text;
-      centerMessage.className = isWin ? 'center-message show win-message' : 'center-message show lose-message';
+      centerMessage.className = 'center-message show lose-message';
       
       // Hide after 2 seconds
       setTimeout(() => {
@@ -516,33 +612,28 @@
       
       // Game over if no moves available
       if (!canMove) {
-        endGame(false);
-      } else {
-        // Check for win (2048 tile)
-        if (values.some(val => val === 2048)) {
-          endGame(true);
-        }
+        endGame();
       }
     }
     
     // End the game
-    function endGame(isWin) {
+    function endGame() {
       isGameOver = true;
       
       // Show centered message
-      showCenterMessage(isWin ? 'WIN!' : 'LOSE!', isWin);
+      showCenterMessage('LOSE!', false);
       
       // Show game over overlay
-      gameOverText.textContent = isWin ? 'You Win!' : 'Game Over!';
+      gameOverText.textContent = 'Game Over!';
       gameOverEl.classList.add('show');
       
-      // Auto-restart after 3 seconds
+      // Auto-restart after 2 seconds
       setTimeout(() => {
         if (isGameOver) { // Only restart if player hasn't clicked anything
           gameOverEl.classList.remove('show');
           setTimeout(startGame, 300);
         }
-      }, 3000);
+      }, 2000);
     }
     
     // Set up event listeners
@@ -585,7 +676,10 @@
       }, { passive: true });
       
       // Button controls
-      newGameBtn.addEventListener('click', startGame);
+      newGameBtn.addEventListener('click', () => {
+      confirmNewGameModal.style.display = 'flex';
+      });
+
       tryAgainBtn.addEventListener('click', () => {
         gameOverEl.classList.remove('show');
         setTimeout(startGame, 300);
@@ -594,7 +688,55 @@
     
     // Initialize the game
     initGame();
+
+    const newsBtn = document.getElementById('newsBtn');
+const newsModal = document.getElementById('newsModal');
+const closeBtn = document.querySelector('.close-btn');
+
+newsBtn.addEventListener('click', () => {
+  newsModal.style.display = 'flex';
+});
+
+closeBtn.addEventListener('click', () => {
+  newsModal.style.display = 'none';
+});
+
+window.addEventListener('click', (e) => {
+  if (e.target === newsModal) {
+    newsModal.style.display = 'none';
+  }
+});
+
+const confirmNewGameModal = document.getElementById('confirmNewGameModal');
+const confirmNewGameBtn = document.getElementById('confirmNewGameBtn');
+const denyNewGameBtn = document.getElementById('denyNewGameBtn');
+const cancelNewGame = document.getElementById('cancelNewGame');
+
+// Коли тиснуть на New Game — показати підтвердження
+newGameBtn.addEventListener('click', () => {
+  confirmNewGameModal.style.display = 'flex';
+});
+
+// Кнопка "Так" — почати нову гру
+confirmNewGameBtn.addEventListener('click', () => {
+  confirmNewGameModal.style.display = 'none';
+  startGame();
+});
+
+// Кнопка "Ні" або хрестик — закрити модалку
+denyNewGameBtn.addEventListener('click', () => {
+  confirmNewGameModal.style.display = 'none';
+});
+cancelNewGame.addEventListener('click', () => {
+  confirmNewGameModal.style.display = 'none';
+});
+
+// Клік поза вікном — закрити
+window.addEventListener('click', (e) => {
+  if (e.target === confirmNewGameModal) {
+    confirmNewGameModal.style.display = 'none';
+  }
+});
   </script>
 </body>
 </html>
-
