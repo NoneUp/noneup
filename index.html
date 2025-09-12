@@ -742,5 +742,116 @@ window.addEventListener('click', (e) => {
   }
 });
   </script>
+  
+  <div id="preloader">
+  <div class="preloader-text">
+    <span class="loading-text">NoneUp</span>
+  </div>
+  <div class="cube">
+    <div class="side front"></div>
+    <div class="side back"></div>
+    <div class="side left"></div>
+    <div class="side right"></div>
+    <div class="side top"></div>
+    <div class="side bottom"></div>
+  </div>
+</div>
+
+<style>
+  #preloader {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: #0d0d0d; /* 👈 тут фон гри (заміни якщо інший) */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    gap: 40px;
+    transition: opacity 1s ease;
+  }
+
+  /* Текст */
+  .preloader-text {
+    position: relative;
+    font-size: 2.5em;
+    font-weight: bold;
+    font-family: monospace;
+    color: transparent;
+    -webkit-text-stroke: 1px #9c4dcc; /* фіолетовий контур */
+    overflow: hidden;
+  }
+
+  .loading-text {
+    position: relative;
+    display: inline-block;
+  }
+
+  .loading-text::before {
+    content: "NoneUp";
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 0%;
+    height: 100%;
+    color: #9c4dcc; /* заливка фіолетовим */
+    overflow: hidden;
+    white-space: nowrap;
+    animation: fillText 5s linear forwards;
+  }
+
+  @keyframes fillText {
+    from { width: 0%; }
+    to   { width: 100%; }
+  }
+
+  /* Куб */
+  .cube {
+    position: relative;
+    width: 80px; height: 80px;
+    transform-style: preserve-3d;
+    animation: spin 3s infinite linear;
+  }
+
+  .side {
+    position: absolute;
+    width: 80px; height: 80px;
+    background: rgba(255,255,255,0.05);
+    border: 2px solid #9c4dcc;
+    animation: cubeFill 5s linear forwards;
+  }
+
+  .front  { transform: rotateY(0deg) translateZ(40px); }
+  .back   { transform: rotateY(180deg) translateZ(40px); }
+  .right  { transform: rotateY(90deg) translateZ(40px); }
+  .left   { transform: rotateY(-90deg) translateZ(40px); }
+  .top    { transform: rotateX(90deg) translateZ(40px); }
+  .bottom { transform: rotateX(-90deg) translateZ(40px); }
+
+  @keyframes spin {
+    from { transform: rotateX(0) rotateY(0); }
+    to   { transform: rotateX(360deg) rotateY(360deg); }
+  }
+
+  @keyframes cubeFill {
+    0%   { background: rgba(255,255,255,0.05); }
+    100% { background: #9c4dcc; }
+  }
+</style>
+
+<script>
+  window.addEventListener("load", () => {
+    const preloader = document.getElementById("preloader");
+
+    setTimeout(() => {
+      preloader.style.opacity = "0";
+      setTimeout(() => {
+        preloader.style.display = "none";
+      }, 1000);
+    }, 5000); // 5 секунд
+  });
+</script>
+
 </body>
 </html>
