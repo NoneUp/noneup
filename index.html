@@ -94,6 +94,36 @@
       gap: 10px;
       width: 100%;
     }
+
+    .right-buttons {
+  display: flex;
+  flex: 1;
+  gap: 10px;
+}
+
+#newsBtn {
+  flex: 0.5; /* половина ширини */
+}
+
+#settingsBtn {
+  flex: 0.5; /* друга половина */
+  background-color: var(--button-bg);
+  color: var(--text-color);
+  border: none;
+  border-radius: var(--border-radius);
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.2s;
+}
+
+#settingsBtn:hover {
+  background-color: var(--button-hover);
+}
+
+#settingsBtn:active {
+  transform: scale(0.98);
+}
+
     
     button {
       flex: 1;
@@ -309,6 +339,164 @@
 #confirmNewGameModal .modal-content button:hover {
   background-color: var(--button-hover);
 }
+
+/* === Уніфікований стиль усіх модалок === */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.6);
+  animation: fadeIn 0.3s ease forwards;
+}
+
+.modal-content {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  margin: 10% auto;
+  padding: 25px 30px;
+  border-radius: var(--border-radius);
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.3);
+  animation: popUp 0.25s ease;
+}
+
+/* Верхня панель у Rules / How Download */
+.modal-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+/* Стрілка назад */
+.back-btn {
+  font-size: 22px;
+  cursor: pointer;
+  user-select: none;
+  padding: 5px 10px;
+  border-radius: 50%;
+  transition: all 0.2s;
+  line-height: 1;
+}
+
+.back-btn:hover {
+  background-color: var(--button-hover);
+}
+
+/* Хрестик закриття */
+.close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 1.5em;
+  cursor: pointer;
+  color: var(--text-color);
+    width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background-color: var(--button-bg);
+  transition: background-color 0.2s;
+}
+
+.close:hover {
+  background-color: var(--button-hover);
+}
+
+/* Текст */
+.modal-content h2 {
+  margin-top: 0;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.modal-content p {
+  font-size: 15px;
+  line-height: 1.6;
+}
+
+/* === Модалки === */
+/* Фон прозорий */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.6); /* прозорий фон */
+  justify-content: center;
+  align-items: center;
+}
+
+/* Модалка непрозора */
+.modal-content {
+  background-color: #1e1e1e;
+  padding: 20px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 400px;
+  max-height: 80vh;
+  overflow-y: auto;
+  color: var(--text-color);
+  position: relative;
+}
+
+/* Хрестик */
+.modal-header .close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 1.5em;
+  cursor: pointer;
+  color: var(--text-color);
+    width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  background-color: var(--button-bg);
+  transition: background-color 0.2s;
+}
+
+.modal-header .close:hover {
+  background-color: var(--button-hover);
+}
+
+
+.modal-header .close:hover {
+  background-color: var(--button-hover);
+}
+
+/* Кнопки в модалках */
+.modal-button {
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 12px;
+  border-radius: var(--border-radius);
+  background: var(--button-bg);
+  color: var(--text-color);
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+}
+
+.modal-button:hover {
+  background-color: var(--button-hover);
+}
+
+
   </style>
 </head>
 <body>
@@ -329,8 +517,12 @@
     
 <div class="controls">
   <button id="newGameBtn">New game</button>
-  <button id="newsBtn">News</button>
+  <div class="right-buttons">
+    <button id="newsBtn">News</button>
+    <button id="settingsBtn">Settings</button>
+  </div>
 </div>
+
 
 <!-- Модальне вікно -->
 <div id="newsModal" class="modal">
@@ -346,6 +538,59 @@
     </div>
   </div>
 </div>
+
+<!-- SETTINGS MODAL -->
+<div class="modal" id="settingsModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <span class="close" id="closeSettings">&times;</span>
+      <h2>Settings</h2>
+    </div>
+    <div class="modal-body">
+      <button class="modal-button" id="rulesBtn">Rules</button>
+      <button class="modal-button" id="howDownloadBtn">How download?</button>
+    </div>
+  </div>
+</div>
+
+<!-- RULES MODAL -->
+<div class="modal" id="rulesModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <span class="close" id="closeRules">&times;</span>
+      <h2>Rules</h2>
+    </div>
+    <div class="modal-body">
+      <p>➤ Game Basics<br>
+• Board: 4×4 grid with numbered tiles<br>
+• Goal: Combine tiles to create 2048 (or aim higher!)<br>
+• Controls: Swipe (↑ ↓ ← →) to move all tiles at once.<br>
+➤ How It Works<br>
+• Start: Two tiles (2 or 4) appear randomly<br>
+• Move: Swipe in any direction—tiles slide until they hit the edge or another tile<br>
+• Merge: When two identical tiles collide, they fuse into one (2+2=4, 4+4=8, etc.)<br>
+• New Tile: After every move, a new 2 or 4 spawns in an empty spot<br>
+• Game Over: When the grid is full and no moves remain, it's game over<br></p>
+    </div>
+  </div>
+</div>
+
+<!-- HOW DOWNLOAD MODAL -->
+<div class="modal" id="howDownloadModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <span class="close" id="closeDownload">&times;</span>
+      <h2>How to download?</h2>
+    </div>
+    <div class="modal-body">
+      <p>To install this website as an app:<br>
+      1. Open the site in your browser.<br>
+      2. Tap “Share” or “⋮” → “Add to Home Screen”.<br>
+      3. Done — the site is now like an app.</p>
+    </div>
+  </div>
+</div>
+
 
 <!-- Модальне вікно підтвердження нової гри -->
 <div id="confirmNewGameModal" class="modal">
@@ -851,6 +1096,42 @@ window.addEventListener('click', (e) => {
       }, 1000);
     }, 5000); // 5 секунд
   });
+
+// SETTINGS MODAL
+const settingsBtn = document.getElementById('settingsBtn');
+const settingsModal = document.getElementById('settingsModal');
+const closeSettings = document.getElementById('closeSettings');
+
+// RULES MODAL
+const rulesBtn = document.getElementById('rulesBtn');
+const rulesModal = document.getElementById('rulesModal');
+const closeRules = document.getElementById('closeRules');
+
+// HOW DOWNLOAD MODAL
+const howDownloadBtn = document.getElementById('howDownloadBtn');
+const howDownloadModal = document.getElementById('howDownloadModal');
+const closeDownload = document.getElementById('closeDownload');
+
+// Відкриття модалок
+settingsBtn.addEventListener('click', () => { settingsModal.style.display = 'flex'; });
+rulesBtn.addEventListener('click', () => { rulesModal.style.display = 'flex'; settingsModal.style.display = 'none'; });
+howDownloadBtn.addEventListener('click', () => { howDownloadModal.style.display = 'flex'; settingsModal.style.display = 'none'; });
+
+// Закриття по хрестиках
+[closeSettings, closeRules, closeDownload].forEach(btn => {
+  btn.addEventListener('click', (e) => {
+    e.target.closest('.modal').style.display = 'none';
+  });
+});
+
+// Закриття при кліку поза модалкою
+window.addEventListener('click', (e) => {
+  [settingsModal, rulesModal, howDownloadModal].forEach(m => {
+    if (e.target === m) m.style.display = 'none';
+  });
+});
+
+
 </script>
 
 </body>
