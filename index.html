@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -514,55 +515,49 @@
         </div>
       </div>
     </div>
-    
-<div class="controls">
-  <button id="newGameBtn">New game</button>
-  <div class="right-buttons">
-    <button id="newsBtn">News</button>
-    <button id="settingsBtn">Settings</button>
-  </div>
-</div>
 
+    <div class="controls">
+      <button id="newGameBtn">New game</button>
+      <div class="right-buttons">
+        <button id="newsBtn">News</button>
+        <button id="settingsBtn">Settings</button>
+      </div>
+    </div>
 
-<!-- Модальне вікно -->
-<div id="newsModal" class="modal">
-  <div class="modal-content">
-    <span class="close-btn">&times;</span>
-    <div class="modal-text">
-      <h2>Last news:</h2>
-      <p></p>
-      <p>• Added settings button.</p>
-      <p>• Added rules and instructions.</p>
-      <p>• New launch animation.</p>
-      <p>• Minor bugs fixed.</p>
-      <h5>Version: 1.3.5</h5>
+    <!-- Модалки -->
+    <div id="newsModal" class="modal">
+      <div class="modal-content">
+        <span class="close" id="closeNews">&times;</span>
+        <h2 style="text-align:center">Last news:</h2>
+        <p>• Added settings button.</p>
+        <p>• Added Preservation (save/restore code).</p>
+        <p>• Minor UI fixes.</p>
+        <h5 style="text-align:center; margin-top:12px">Version: 1.3.6</h5>
+      </div>
     </div>
-  </div>
-</div>
 
-<!-- SETTINGS MODAL -->
-<div class="modal" id="settingsModal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <span class="close" id="closeSettings">&times;</span>
-      <h2>Settings</h2>
+    <div class="modal" id="settingsModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Settings</h2>
+          <span class="close" id="closeSettings">&times;</span>
+        </div>
+        <div class="modal-body">
+          <button class="modal-button" id="rulesBtn">Rules</button>
+          <button class="modal-button" id="howDownloadBtn">How download?</button>
+          <button class="modal-button" id="preservationBtn">Preservation</button>
+        </div>
+      </div>
     </div>
-    <div class="modal-body">
-      <button class="modal-button" id="rulesBtn">Rules</button>
-      <button class="modal-button" id="howDownloadBtn">How download?</button>
-    </div>
-  </div>
-</div>
 
-<!-- RULES MODAL -->
-<div class="modal" id="rulesModal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <span class="close" id="closeRules">&times;</span>
-      <h2>Rules</h2>
-    </div>
-    <div class="modal-body">
-      <p>➤ Game Basics<br>
+    <div class="modal" id="rulesModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Rules</h2>
+          <span class="close" id="closeRules">&times;</span>
+        </div>
+        <div class="modal-body">
+          <p>➤ Game Basics<br>
 • Board: 4×4 grid with numbered tiles<br>
 • Goal: Combine tiles to create 2048 (or aim higher!)<br>
 • Controls: Swipe (↑ ↓ ← →) to move all tiles at once.<br>
@@ -572,41 +567,286 @@
 • Merge: When two identical tiles collide, they fuse into one (2+2=4, 4+4=8, etc.)<br>
 • New Tile: After every move, a new 2 or 4 spawns in an empty spot<br>
 • Game Over: When the grid is full and no moves remain, it's game over<br></p>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
 
-<!-- HOW DOWNLOAD MODAL -->
-<div class="modal" id="howDownloadModal">
-  <div class="modal-content">
-    <div class="modal-header">
-      <span class="close" id="closeDownload">&times;</span>
-      <h2>How to download?</h2>
+    <div class="modal" id="howDownloadModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>How to download?</h2>
+          <span class="close" id="closeDownload">&times;</span>
+        </div>
+        <div class="modal-body">
+          <p>To install this website as an app:<br>
+          1. Open the site in your browser.<br>
+          2. Tap “Share” or “⋮” → “Add to Home Screen”.<br>
+          3. Done — the site is now like an app.</p>
+        </div>
+      </div>
     </div>
-    <div class="modal-body">
-      <p>To install this website as an app:<br>
-      1. Open the site in your browser.<br>
-      2. Tap “Share” or “⋮” → “Add to Home Screen”.<br>
-      3. Done — the site is now like an app.</p>
+
+    <!-- Preservation modal -->
+    <div class="modal" id="preservationModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Preservation</h2>
+          <span class="close" id="closePreservation">&times;</span>
+        </div>
+        <div class="modal-body">
+          <p class="note">This code represents your <strong>BEST</strong> score. Copy it and paste on another device to restore your record.</p>
+
+          <div class="preservation-row" style="margin-top:12px;">
+            <input type="text" id="saveCodeOutput" readonly placeholder="Your save code will appear here">
+            <button class="small-btn" id="copySaveBtn">Copy</button>
+          </div>
+
+          <div style="height:10px"></div>
+
+          <div class="preservation-row">
+            <input type="text" id="saveCodeInput" placeholder="Paste code here to load">
+            <button class="small-btn" id="loadSaveBtn">Load</button>
+          </div>
+
+          <p id="presMessage" class="note" style="margin-top:10px"></p>
+          <p class="note">Code format: <strong>NUP-XXXXXXC</strong> (6 chars payload + 1 checksum). Example: <em>NUP-00A1FZQ</em></p>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
 
+    <!-- Confirm new game -->
+    <div id="confirmNewGameModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-text">
+          <h2>Are you sure you want to start a new game?</h2>
+          <div style="display: flex; justify-content: center; gap: 20px; margin-top: 20px;">
+            <button id="confirmNewGameBtn">Yes</button>
+            <button id="denyNewGameBtn">No</button>
+          </div>
+        </div>
+      </div>
+    </div>
 
-<!-- Модальне вікно підтвердження нової гри -->
-<div id="confirmNewGameModal" class="modal">
-  <div class="modal-content">
-
-    <div class="modal-text">
-      <h2>Are you sure you want to start a new game?</h2>
-      <div style="display: flex; justify-content: center; gap: 20px; margin-top: 20px;">
-        <button id="confirmNewGameBtn">Yes</button>
-        <button id="denyNewGameBtn">No</button>
+    <div id="grid">
+      <div class="center-message" id="centerMessage"></div>
+      <div class="game-over" id="gameOver">
+        <h2 id="gameOverText">Game Over!</h2>
+        <button id="tryAgainBtn">Try Again</button>
       </div>
     </div>
   </div>
-</div>
-    
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="manifest" href="./manifest.json">
+    <link rel="apple-touch-icon" href="./logo-192x192.png">
+    <link rel="icon" href="logo.jpg" type="image/png">
+  <title>NoneUp 2048 Game</title>
+  <style>
+    :root {
+      --tile-size: min(20vw, 100px);
+      --gap-size: calc(var(--tile-size) / 10);
+      --border-radius: calc(var(--tile-size) / 10);
+      --bg-color: #121212;
+      --text-color: #e0e0e0;
+      --grid-bg: #1e1e1e;
+      --tile-bg: #2d2d2d;
+      --button-bg: #3a3a3a;
+      --button-hover: #4a4a4a;
+      --score-bg: #252525;
+      --game-over-bg: rgba(30, 30, 30, 0.9);
+    }
+    * { box-sizing: border-box; font-family: 'Arial Rounded MT Bold', 'Arial', sans-serif; user-select: none; margin: 0; padding: 0; }
+    body { margin: 0; background: var(--bg-color); display: flex; justify-content: center; align-items: center; min-height: 100vh; flex-direction: column; color: var(--text-color); overflow: hidden; }
+    .game-container { display: flex; flex-direction: column; align-items: center; gap: 20px; padding: 20px; width: 100%; max-width: 500px; }
+    .header { display: flex; justify-content: space-between; width: 100%; align-items: center; }
+    h1 { font-size: 3.5em; margin: 0; color: var(--text-color); }
+    .scores { display: flex; gap: 10px; }
+    .score-box { background: var(--score-bg); color: var(--text-color); padding: 10px 15px; border-radius: var(--border-radius); text-align: center; min-width: 80px; }
+    .score-title { font-size: 0.9em; opacity: 0.8; }
+    .score-value { font-size: 1.5em; font-weight: bold; }
+    .controls { display: flex; gap: 10px; width: 100%; }
+    .right-buttons { display: flex; flex: 1; gap: 10px; }
+    #newsBtn { flex: 0.5; }
+    #settingsBtn { flex: 0.5; background-color: var(--button-bg); color: var(--text-color); border: none; border-radius: var(--border-radius); cursor: pointer; font-weight: bold; transition: all 0.2s; }
+    #settingsBtn:hover { background-color: var(--button-hover); }
+    button { flex: 1; padding: 12px 0; font-size: 1.1em; border: none; border-radius: var(--border-radius); background-color: var(--button-bg); color: var(--text-color); cursor: pointer; font-weight: bold; transition: all 0.2s; }
+    button:hover { background-color: var(--button-hover); }
+    button:active { transform: scale(0.98); }
+    #grid { display: grid; grid-template-columns: repeat(4, var(--tile-size)); grid-template-rows: repeat(4, var(--tile-size)); gap: var(--gap-size); background-color: var(--grid-bg); padding: var(--gap-size); border-radius: var(--border-radius); position: relative; width: calc(4 * var(--tile-size) + 5 * var(--gap-size)); }
+    .tile { width: var(--tile-size); height: var(--tile-size); background: var(--tile-bg); display: flex; justify-content: center; align-items: center; font-size: 2em; font-weight: bold; color: var(--text-color); border-radius: calc(var(--border-radius) / 2); transition: all 0.15s ease-in-out; position: relative; z-index: 1; }
+    .tile[data-value="2"] { background: #2e2d40; color: #d0d0ff; }
+    .tile[data-value="4"] { background: #2d2a4a; color: #d0d0ff; }
+    .tile[data-value="8"] { background: #3a2a5a; color: #d0d0ff; }
+    .tile[data-value="16"] { background: #4a2a6a; color: #d0d0ff; }
+    .tile[data-value="32"] { background: #5a2a7a; color: #d0d0ff; }
+    .tile[data-value="64"] { background: #6a2a8a; color: #d0d0ff; }
+    .tile[data-value="128"] { background: #3a4a8a; color: #d0d0ff; font-size: 1.8em; }
+    .tile[data-value="256"] { background: #2a5a9a; color: #d0d0ff; font-size: 1.8em; }
+    .tile[data-value="512"] { background: #2a6aaa; color: #d0d0ff; font-size: 1.8em; }
+    .tile[data-value="1024"] { background: #2a7aba; color: #d0d0ff; font-size: 1.5em; }
+    .tile[data-value="2048"] { background: #2a8aca; color: #d0d0ff; font-size: 1.5em; }
+    .tile[data-value="4096"] { background: #2a9adb; color: #ffffff; font-size: 1.4em; }
+    .tile[data-value="8192"] { background: #2aabd0; color: #ffffff; font-size: 1.3em; }
+    .tile[data-value="16384"] { background: #2abdb0; color: #ffffff; font-size: 1.2em; }
+    .tile[data-value="32768"] { background: #2ace90; color: #ffffff; font-size: 1.1em; }
+    .tile[data-value="65536"] { background: #2ae070; color: #ffffff; font-size: 1em; }
+    .game-over { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--game-over-bg); z-index: 10; display: flex; flex-direction: column; justify-content: center; align-items: center; border-radius: var(--border-radius); opacity: 0; pointer-events: none; transition: opacity 0.3s; }
+    .game-over.show { opacity: 1; pointer-events: all; }
+    .game-over h2 { font-size: 3em; margin-bottom: 20px; color: var(--text-color); text-align: center; }
+    .lose-message { color: #6a2a8a; }
+    .game-over button { padding: 15px 30px; font-size: 1.2em; }
+    .center-message { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 4em; font-weight: bold; z-index: 5; opacity: 0; transition: opacity 0.3s; pointer-events: none; text-shadow: 0 0 10px rgba(0,0,0,0.5); }
+    .center-message.show { opacity: 1; }
+    @media (max-width: 500px) { :root { --tile-size: 20vw; } h1 { font-size: 2.5em; } .score-box { padding: 8px 10px; min-width: 70px; } .score-value { font-size: 1.2em; } .center-message { font-size: 3em; } }
+
+    /* Modal styles (unified) */
+    .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); justify-content: center; align-items: center; }
+    .modal-content { background-color: var(--bg-color); color: var(--text-color); margin: 10% auto; padding: 25px 30px; border-radius: var(--border-radius); width: 90%; max-width: 500px; box-shadow: 0 0 25px rgba(0, 0, 0, 0.3); animation: popUp 0.25s ease; position: relative; }
+    .modal-header { display:flex; justify-content: space-between; align-items:center; margin-bottom:10px; }
+    .close { position: absolute; top: 10px; right: 15px; font-size: 1.5em; cursor: pointer; color: var(--text-color); width: 30px; height: 30px; display: flex; justify-content: center; align-items: center; border-radius: 50%; background-color: var(--button-bg); transition: background-color 0.2s; }
+    .close:hover { background-color: var(--button-hover); }
+    .modal-button { display:block; width:100%; margin:10px 0; padding:12px; border-radius: var(--border-radius); background: var(--button-bg); color: var(--text-color); font-weight:600; border:none; cursor:pointer; }
+    .modal-button:hover { background-color: var(--button-hover); }
+
+    /* Preservation UI */
+    .preservation-row { display:flex; gap:10px; margin-top:10px; align-items:center; }
+    .preservation-row input[type="text"] { flex:1; padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.06); background:#111; color:var(--text-color); font-weight:600; }
+    .small-btn { padding:10px 12px; border-radius:8px; border:none; background:var(--button-bg); color:var(--text-color); cursor:pointer; font-weight:700; }
+    .small-btn:hover { background:var(--button-hover); }
+    .note { font-size:0.9em; opacity:0.85; margin-top:12px; line-height:1.3; }
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <div class="header">
+      <h1>NoneUp</h1>
+      <div class="scores">
+        <div class="score-box">
+          <div class="score-title">SCORE</div>
+          <div class="score-value" id="score">0</div>
+        </div>
+        <div class="score-box">
+          <div class="score-title">BEST</div>
+          <div class="score-value" id="best">0</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button id="newGameBtn">New game</button>
+      <div class="right-buttons">
+        <button id="newsBtn">News</button>
+        <button id="settingsBtn">Settings</button>
+      </div>
+    </div>
+
+    <!-- Модалки -->
+    <div id="newsModal" class="modal">
+      <div class="modal-content">
+        <span class="close" id="closeNews">&times;</span>
+        <h2 style="text-align:center">Last news:</h2>
+        <p>• Added settings button.</p>
+        <p>• Added Preservation (save/restore code).</p>
+        <p>• Minor UI fixes.</p>
+        <h5 style="text-align:center; margin-top:12px">Version: 1.3.6</h5>
+      </div>
+    </div>
+
+    <div class="modal" id="settingsModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Settings</h2>
+          <span class="close" id="closeSettings">&times;</span>
+        </div>
+        <div class="modal-body">
+          <button class="modal-button" id="rulesBtn">Rules</button>
+          <button class="modal-button" id="howDownloadBtn">How download?</button>
+          <button class="modal-button" id="preservationBtn">Preservation</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal" id="rulesModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Rules</h2>
+          <span class="close" id="closeRules">&times;</span>
+        </div>
+        <div class="modal-body">
+          <p>➤ Game Basics<br>
+• Board: 4×4 grid with numbered tiles<br>
+• Goal: Combine tiles to create 2048 (or aim higher!)<br>
+• Controls: Swipe (↑ ↓ ← →) to move all tiles at once.<br>
+➤ How It Works<br>
+• Start: Two tiles (2 or 4) appear randomly<br>
+• Move: Swipe in any direction—tiles slide until they hit the edge or another tile<br>
+• Merge: When two identical tiles collide, they fuse into one (2+2=4, 4+4=8, etc.)<br>
+• New Tile: After every move, a new 2 or 4 spawns in an empty spot<br>
+• Game Over: When the grid is full and no moves remain, it's game over<br></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal" id="howDownloadModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>How to download?</h2>
+          <span class="close" id="closeDownload">&times;</span>
+        </div>
+        <div class="modal-body">
+          <p>To install this website as an app:<br>
+          1. Open the site in your browser.<br>
+          2. Tap “Share” or “⋮” → “Add to Home Screen”.<br>
+          3. Done — the site is now like an app.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Preservation modal -->
+    <div class="modal" id="preservationModal">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Preservation</h2>
+          <span class="close" id="closePreservation">&times;</span>
+        </div>
+        <div class="modal-body">
+          <p class="note">This code represents your <strong>BEST</strong> score. Copy it and paste on another device to restore your record.</p>
+
+          <div class="preservation-row" style="margin-top:12px;">
+            <input type="text" id="saveCodeOutput" readonly placeholder="Your save code will appear here">
+            <button class="small-btn" id="copySaveBtn">Copy</button>
+          </div>
+
+          <div style="height:10px"></div>
+
+          <div class="preservation-row">
+            <input type="text" id="saveCodeInput" placeholder="Paste code here to load">
+            <button class="small-btn" id="loadSaveBtn">Load</button>
+          </div>
+
+          <p id="presMessage" class="note" style="margin-top:10px"></p>
+          <p class="note">Code format: <strong>NUP-XXXXXXC</strong> (6 chars payload + 1 checksum). Example: <em>NUP-00A1FZQ</em></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Confirm new game -->
+    <div id="confirmNewGameModal" class="modal">
+      <div class="modal-content">
+        <div class="modal-text">
+          <h2>Are you sure you want to start a new game?</h2>
+          <div style="display: flex; justify-content: center; gap: 20px; margin-top: 20px;">
+            <button id="confirmNewGameBtn">Yes</button>
+            <button id="denyNewGameBtn">No</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <div id="grid">
       <div class="center-message" id="centerMessage"></div>
       <div class="game-over" id="gameOver">
@@ -617,6 +857,9 @@
   </div>
 
   <script>
+    /* -------------------------
+       Core game variables
+    -------------------------*/
     const grid = document.getElementById('grid');
     const scoreEl = document.getElementById('score');
     const bestEl = document.getElementById('best');
@@ -625,31 +868,25 @@
     const gameOverEl = document.getElementById('gameOver');
     const gameOverText = document.getElementById('gameOverText');
     const centerMessage = document.getElementById('centerMessage');
-    
+
     let tiles = [];
     let score = 0;
-    let best = localStorage.getItem('best2048') || 0;
+    let best = parseInt(localStorage.getItem('best2048')) || 0;
     let isGameOver = false;
     let isAnimating = false;
-    
+
     bestEl.textContent = best;
-    
-    // Initialize the game
+
     function initGame() {
       createGrid();
       startGame();
       setupEventListeners();
     }
-    
-    // Create the game grid
+
     function createGrid() {
       grid.innerHTML = '';
       tiles = [];
-      
-      // Create center message element
       grid.appendChild(centerMessage);
-      
-      // Create background cells
       for (let i = 0; i < 16; i++) {
         const cell = document.createElement('div');
         cell.classList.add('tile');
@@ -659,491 +896,397 @@
         tiles.push(cell);
       }
     }
-    
-    // Show centered message
-    function showCenterMessage(text, isWin) {
+
+    function showCenterMessage(text) {
       centerMessage.textContent = text;
       centerMessage.className = 'center-message show lose-message';
-      
-      // Hide after 2 seconds
-      setTimeout(() => {
-        centerMessage.classList.remove('show');
-      }, 2000);
+      setTimeout(() => centerMessage.classList.remove('show'), 2000);
     }
-    
-    // Start a new game
+
     function startGame() {
-      // Reset game state
       score = 0;
       isGameOver = false;
       updateScore();
       clearGrid();
-      
-      // Add initial tiles
-      addRandomTile();
-      addRandomTile();
-      
-      // Hide game over screen
+      addRandomTile(); addRandomTile();
       gameOverEl.classList.remove('show');
     }
-    
-    // Clear the grid
+
     function clearGrid() {
-      tiles.forEach(tile => {
-        tile.textContent = '';
-        tile.dataset.value = '';
-        tile.className = 'tile';
-      });
+      tiles.forEach(tile => { tile.textContent = ''; tile.dataset.value = ''; tile.className = 'tile'; });
     }
-    
-    // Get empty tiles
-    function getEmptyTiles() {
-      return tiles.filter(tile => tile.textContent === '');
-    }
-    
-    // Add a random tile (90% chance for 2, 10% chance for 4)
+
+    function getEmptyTiles() { return tiles.filter(t => t.textContent === ''); }
+
     function addRandomTile() {
-      const emptyTiles = getEmptyTiles();
-      if (emptyTiles.length === 0) return;
-      
-      const tile = emptyTiles[Math.floor(Math.random() * emptyTiles.length)];
+      const empty = getEmptyTiles();
+      if (empty.length === 0) return;
+      const tile = empty[Math.floor(Math.random() * empty.length)];
       const value = Math.random() < 0.9 ? 2 : 4;
-      
       tile.textContent = value;
       tile.dataset.value = value;
       tile.classList.add('new-tile');
-      
-      // Remove the new-tile class after animation
-      setTimeout(() => {
-        tile.classList.remove('new-tile');
-      }, 100);
+      setTimeout(()=> tile.classList.remove('new-tile'), 100);
     }
-    
-    // Get current grid values
-    function getGridValues() {
-      return tiles.map(tile => parseInt(tile.textContent) || 0);
-    }
-    
-    // Update grid with new values
+
+    function getGridValues() { return tiles.map(t => parseInt(t.textContent) || 0); }
+
     function updateGridValues(values) {
-      values.forEach((val, i) => {
-        tiles[i].textContent = val === 0 ? '' : val;
-        tiles[i].dataset.value = val === 0 ? '' : val;
-        
-        // Update tile class based on value
+      values.forEach((v, i) => {
+        tiles[i].textContent = v === 0 ? '' : v;
+        tiles[i].dataset.value = v === 0 ? '' : v;
         tiles[i].className = 'tile';
-        if (val > 0) {
-          tiles[i].classList.add(`tile-${val}`);
-        }
+        if (v > 0) tiles[i].classList.add(`tile-${v}`);
       });
     }
-    
-    // Move tiles in specified direction
+
     function move(direction) {
       if (isGameOver || isAnimating) return;
-      
       isAnimating = true;
       let values = getGridValues();
       let newValues = Array(16).fill(0);
       let moved = false;
       let scoreIncrease = 0;
-      
-      // Process each row/column based on direction
+
       for (let i = 0; i < 4; i++) {
         let line = [];
-        let newLine = [];
-        
-        // Extract the line based on direction
         for (let j = 0; j < 4; j++) {
-          const index = 
-            direction === 'left' ? i * 4 + j :
-            direction === 'right' ? i * 4 + (3 - j) :
-            direction === 'up' ? j * 4 + i :
-            direction === 'down' ? (3 - j) * 4 + i : 0;
-          line.push(values[index]);
+          const idx = direction === 'left' ? i*4 + j : direction === 'right' ? i*4 + (3-j) : direction === 'up' ? j*4 + i : (3-j)*4 + i;
+          line.push(values[idx]);
         }
-        
-        // Remove zeros
-        let filteredLine = line.filter(val => val !== 0);
-        
-        // Combine adjacent equal values
-        for (let j = 0; j < filteredLine.length; j++) {
-          if (j < filteredLine.length - 1 && filteredLine[j] === filteredLine[j + 1]) {
-            filteredLine[j] *= 2;
-            scoreIncrease += filteredLine[j];
-            filteredLine.splice(j + 1, 1);
+        let filtered = line.filter(v => v !== 0);
+        for (let j = 0; j < filtered.length; j++) {
+          if (j < filtered.length - 1 && filtered[j] === filtered[j+1]) {
+            filtered[j] *= 2;
+            scoreIncrease += filtered[j];
+            filtered.splice(j+1,1);
           }
         }
-        
-        // Pad with zeros
-        while (filteredLine.length < 4) {
-          filteredLine.push(0);
-        }
-        
-        // Check if movement occurred
-        if (line.some((val, j) => val !== filteredLine[j])) {
-          moved = true;
-        }
-        
-        // Store the new line
-        newLine = filteredLine;
-        
-        // Put back the values in the correct positions
+        while (filtered.length < 4) filtered.push(0);
+        if (line.some((v,j)=> v !== filtered[j])) moved = true;
         for (let j = 0; j < 4; j++) {
-          const index = 
-            direction === 'left' ? i * 4 + j :
-            direction === 'right' ? i * 4 + (3 - j) :
-            direction === 'up' ? j * 4 + i :
-            direction === 'down' ? (3 - j) * 4 + i : 0;
-          newValues[index] = newLine[j];
+          const idx = direction === 'left' ? i*4 + j : direction === 'right' ? i*4 + (3-j) : direction === 'up' ? j*4 + i : (3-j)*4 + i;
+          newValues[idx] = filtered[j];
         }
       }
-      
-      // If movement occurred, update the grid and score
+
       if (moved) {
         updateGridValues(newValues);
         score += scoreIncrease;
         updateScore();
-        
-        // Add a new tile after a short delay
-        setTimeout(() => {
-          addRandomTile();
-          checkGameOver();
-          isAnimating = false;
-        }, 150);
-      } else {
-        isAnimating = false;
-      }
+        setTimeout(()=> { addRandomTile(); checkGameOver(); isAnimating = false; }, 150);
+      } else { isAnimating = false; }
     }
-    
-    // Update score display
+
     function updateScore() {
       scoreEl.textContent = score;
       if (score > best) {
         best = score;
         bestEl.textContent = best;
         localStorage.setItem('best2048', best);
+        // update preservation output when best changes
+        updatePreservationOutput();
       }
     }
-    
-    // Check if game is over
+
     function checkGameOver() {
-      const emptyTiles = getEmptyTiles();
-      if (emptyTiles.length > 0) return;
-      
+      const empty = getEmptyTiles();
+      if (empty.length > 0) return;
       const values = getGridValues();
       let canMove = false;
-      
-      // Check horizontal moves
-      for (let i = 0; i < 4; i++) {
+      for (let i = 0; i < 4 && !canMove; i++) {
         for (let j = 0; j < 3; j++) {
-          const index = i * 4 + j;
-          if (values[index] === values[index + 1]) {
-            canMove = true;
-            break;
-          }
-        }
-        if (canMove) break;
-      }
-      
-      // Check vertical moves
-      if (!canMove) {
-        for (let j = 0; j < 4; j++) {
-          for (let i = 0; i < 3; i++) {
-            const index = i * 4 + j;
-            if (values[index] === values[index + 4]) {
-              canMove = true;
-              break;
-            }
-          }
-          if (canMove) break;
+          const idx = i*4 + j;
+          if (values[idx] === values[idx+1]) { canMove = true; break; }
         }
       }
-      
-      // Game over if no moves available
-      if (!canMove) {
-        endGame();
+      for (let j = 0; j < 4 && !canMove; j++) {
+        for (let i = 0; i < 3; i++) {
+          const idx = i*4 + j;
+          if (values[idx] === values[idx+4]) { canMove = true; break; }
+        }
       }
+      if (!canMove) endGame();
     }
-    
-    // End the game
+
     function endGame() {
       isGameOver = true;
-      
-      // Show centered message
-      showCenterMessage('LOSE!', false);
-      
-      // Show game over overlay
+      showCenterMessage('LOSE!');
       gameOverText.textContent = 'Game Over!';
       gameOverEl.classList.add('show');
-      
-      // Auto-restart after 2 seconds
-      setTimeout(() => {
-        if (isGameOver) { // Only restart if player hasn't clicked anything
-          gameOverEl.classList.remove('show');
-          setTimeout(startGame, 300);
-        }
+      setTimeout(()=> {
+        if (isGameOver) { gameOverEl.classList.remove('show'); setTimeout(startGame,300); }
       }, 2000);
     }
-    
-    // Set up event listeners
+
     function setupEventListeners() {
-      // Keyboard controls
       document.addEventListener('keydown', (e) => {
-        // Arrow keys
         if (e.key === 'ArrowLeft' || e.key.toLowerCase() === 'a') move('left');
         else if (e.key === 'ArrowRight' || e.key.toLowerCase() === 'd') move('right');
         else if (e.key === 'ArrowUp' || e.key.toLowerCase() === 'w') move('up');
         else if (e.key === 'ArrowDown' || e.key.toLowerCase() === 's') move('down');
       });
-      
-      // Touch controls (swipe)
+
       let touchStartX, touchStartY;
-      
-      grid.addEventListener('touchstart', (e) => {
-        touchStartX = e.touches[0].clientX;
-        touchStartY = e.touches[0].clientY;
-      }, { passive: true });
-      
+      grid.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; touchStartY = e.touches[0].clientY; }, { passive:true });
       grid.addEventListener('touchend', (e) => {
         if (!touchStartX || !touchStartY) return;
-        
         const touchEndX = e.changedTouches[0].clientX;
         const touchEndY = e.changedTouches[0].clientY;
         const dx = touchEndX - touchStartX;
         const dy = touchEndY - touchStartY;
-        
-        // Determine swipe direction
         if (Math.abs(dx) > Math.abs(dy)) {
-          if (dx > 50) move('right');
-          else if (dx < -50) move('left');
+          if (dx > 50) move('right'); else if (dx < -50) move('left');
         } else {
-          if (dy > 50) move('down');
-          else if (dy < -50) move('up');
+          if (dy > 50) move('down'); else if (dy < -50) move('up');
         }
-        
         touchStartX = touchStartY = null;
-      }, { passive: true });
-      
-      // Button controls
-      newGameBtn.addEventListener('click', () => {
-      confirmNewGameModal.style.display = 'flex';
-      });
+      }, { passive:true });
 
-      tryAgainBtn.addEventListener('click', () => {
-        gameOverEl.classList.remove('show');
-        setTimeout(startGame, 300);
-      });
+      newGameBtn.addEventListener('click', () => { confirmNewGameModal.style.display = 'flex'; });
+      tryAgainBtn.addEventListener('click', () => { gameOverEl.classList.remove('show'); setTimeout(startGame,300); });
     }
-    
-    // Initialize the game
+
+    // init
     initGame();
 
+    /* -------------------------
+       Simple modal handling
+    -------------------------*/
     const newsBtn = document.getElementById('newsBtn');
-const newsModal = document.getElementById('newsModal');
-const closeBtn = document.querySelector('.close-btn');
+    const newsModal = document.getElementById('newsModal');
+    const closeNews = document.getElementById('closeNews');
 
-newsBtn.addEventListener('click', () => {
-  newsModal.style.display = 'flex';
-});
+    newsBtn.addEventListener('click', ()=> newsModal.style.display = 'flex');
+    closeNews.addEventListener('click', ()=> newsModal.style.display = 'none');
+    window.addEventListener('click', (e)=> { if (e.target === newsModal) newsModal.style.display = 'none'; });
 
-closeBtn.addEventListener('click', () => {
-  newsModal.style.display = 'none';
-});
+    const settingsBtn = document.getElementById('settingsBtn');
+    const settingsModal = document.getElementById('settingsModal');
+    const closeSettings = document.getElementById('closeSettings');
+    settingsBtn.addEventListener('click', ()=> settingsModal.style.display = 'flex');
+    closeSettings.addEventListener('click', ()=> settingsModal.style.display = 'none');
+    window.addEventListener('click', (e)=> { if (e.target === settingsModal) settingsModal.style.display = 'none'; });
 
-window.addEventListener('click', (e) => {
-  if (e.target === newsModal) {
-    newsModal.style.display = 'none';
-  }
-});
+    // rules/download
+    const rulesBtn = document.getElementById('rulesBtn'), rulesModal = document.getElementById('rulesModal'), closeRules = document.getElementById('closeRules');
+    const howDownloadBtn = document.getElementById('howDownloadBtn'), howDownloadModal = document.getElementById('howDownloadModal'), closeDownload = document.getElementById('closeDownload');
+    rulesBtn.addEventListener('click', ()=> { rulesModal.style.display = 'flex'; settingsModal.style.display = 'none'; });
+    howDownloadBtn.addEventListener('click', ()=> { howDownloadModal.style.display = 'flex'; settingsModal.style.display = 'none'; });
+    [closeRules, closeDownload].forEach(btn => btn.addEventListener('click', (e)=> e.target.closest('.modal').style.display = 'none'));
+    window.addEventListener('click', (e)=> { if (e.target === rulesModal) rulesModal.style.display = 'none'; if (e.target === howDownloadModal) howDownloadModal.style.display = 'none'; });
 
-const confirmNewGameModal = document.getElementById('confirmNewGameModal');
-const confirmNewGameBtn = document.getElementById('confirmNewGameBtn');
-const denyNewGameBtn = document.getElementById('denyNewGameBtn');
-const cancelNewGame = document.getElementById('cancelNewGame');
+    // confirm new game modal
+    const confirmNewGameModal = document.getElementById('confirmNewGameModal');
+    const confirmNewGameBtn = document.getElementById('confirmNewGameBtn');
+    const denyNewGameBtn = document.getElementById('denyNewGameBtn');
+    confirmNewGameBtn.addEventListener('click', ()=> { confirmNewGameModal.style.display = 'none'; startGame(); });
+    denyNewGameBtn.addEventListener('click', ()=> { confirmNewGameModal.style.display = 'none'; });
+    window.addEventListener('click', (e)=> { if (e.target === confirmNewGameModal) confirmNewGameModal.style.display = 'none'; });
 
-// Коли тиснуть на New Game — показати підтвердження
-newGameBtn.addEventListener('click', () => {
-  confirmNewGameModal.style.display = 'flex';
-});
+    /* -------------------------
+       Preservation: encode/decode best -> code
+       Format: NUP-<6chars payload><1char checksum>
+       payload = base36(best) padded to 6 (uppercase)
+       checksum = base36( (digitSum(best) + best%97) % 36 )
+    -------------------------*/
+    const preservationBtn = document.getElementById('preservationBtn');
+    const preservationModal = document.getElementById('preservationModal');
+    const closePreservation = document.getElementById('closePreservation');
+    const saveCodeOutput = document.getElementById('saveCodeOutput');
+    const copySaveBtn = document.getElementById('copySaveBtn');
+    const saveCodeInput = document.getElementById('saveCodeInput');
+    const loadSaveBtn = document.getElementById('loadSaveBtn');
+    const presMessage = document.getElementById('presMessage');
 
-// Кнопка "Так" — почати нову гру
-confirmNewGameBtn.addEventListener('click', () => {
-  confirmNewGameModal.style.display = 'none';
-  startGame();
-});
+    function toBase36Pad(n, len) {
+      const s = n.toString(36).toUpperCase();
+      return s.padStart(len, '0');
+    }
+    function fromBase36(s) { return parseInt(s, 36); }
+    function digitSum(n) { return String(n).split('').reduce((a,c)=> a + parseInt(c||0,10), 0); }
 
-// Кнопка "Ні" або хрестик — закрити модалку
-denyNewGameBtn.addEventListener('click', () => {
-  confirmNewGameModal.style.display = 'none';
-});
-cancelNewGame.addEventListener('click', () => {
-  confirmNewGameModal.style.display = 'none';
-});
+    function generateSaveCode(bestValue) {
+      // payload: base36(best) padded to 6
+      const payload = toBase36Pad(bestValue, 6); // supports best up to 36^6-1 (~2.17e9)
+      const chkVal = (digitSum(bestValue) + (bestValue % 97)) % 36;
+      const checksum = toBase36Pad(chkVal, 1);
+      return `NUP-${payload}${checksum}`;
+    }
 
-// Клік поза вікном — закрити
-window.addEventListener('click', (e) => {
-  if (e.target === confirmNewGameModal) {
-    confirmNewGameModal.style.display = 'none';
-  }
-});
-  </script>
-  
-  <div id="preloader">
-  <div class="preloader-text">
-    <span class="loading-text">NoneUp</span>
-  </div>
-  <div class="cube">
-    <div class="side front"></div>
-    <div class="side back"></div>
-    <div class="side left"></div>
-    <div class="side right"></div>
-    <div class="side top"></div>
-    <div class="side bottom"></div>
-  </div>
-</div>
+    function parseSaveCode(code) {
+      if (!code || typeof code !== 'string') return { ok:false, err:'Empty code' };
+      code = code.trim().toUpperCase();
+      if (!code.startsWith('NUP-')) return { ok:false, err:'Bad prefix' };
+      const body = code.slice(4);
+      if (body.length !== 7) return { ok:false, err:'Bad code length' };
+      const payload = body.slice(0,6);
+      const checksum = body.slice(6,7);
 
-<style>
-  #preloader {
-    position: fixed;
-    top: 0; left: 0;
-    width: 100vw; height: 100vh;
-    background: #0d0d0d; /* 👈 тут фон гри (заміни якщо інший) */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 9999;
-    gap: 40px;
-    transition: opacity 1s ease;
-  }
+      if (!/^[0-9A-Z]{6}$/.test(payload) || !/^[0-9A-Z]$/.test(checksum)) return { ok:false, err:'Invalid characters' };
 
-  /* Текст */
-  .preloader-text {
-    position: relative;
-    font-size: 2.5em;
-    font-weight: bold;
-    font-family: monospace;
-    color: transparent;
-    -webkit-text-stroke: 1px #9c4dcc; /* фіолетовий контур */
-    overflow: hidden;
-  }
+      const decodedBest = fromBase36(payload);
+      const expectedChk = toBase36Pad((digitSum(decodedBest) + (decodedBest % 97)) % 36, 1);
 
-  .loading-text {
-    position: relative;
-    display: inline-block;
-  }
+      if (expectedChk !== checksum) return { ok:false, err:'Checksum mismatch' };
+      return { ok:true, best: decodedBest };
+    }
 
-  .loading-text::before {
-    content: "NoneUp";
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 0%;
-    height: 100%;
-    color: #9c4dcc; /* заливка фіолетовим */
-    overflow: hidden;
-    white-space: nowrap;
-    animation: fillText 5s linear forwards;
-  }
+    function updatePreservationOutput() {
+      // refresh displayed code
+      const code = generateSaveCode(best);
+      saveCodeOutput.value = code;
+    }
 
-  @keyframes fillText {
-    from { width: 0%; }
-    to   { width: 100%; }
-  }
-
-  /* Куб */
-  .cube {
-    position: relative;
-    width: 80px; height: 80px;
-    transform-style: preserve-3d;
-    animation: spin 3s infinite linear;
-  }
-
-  .side {
-    position: absolute;
-    width: 80px; height: 80px;
-    background: rgba(255,255,255,0.05);
-    border: 2px solid #9c4dcc;
-    animation: cubeFill 5s linear forwards;
-  }
-
-  .front  { transform: rotateY(0deg) translateZ(40px); }
-  .back   { transform: rotateY(180deg) translateZ(40px); }
-  .right  { transform: rotateY(90deg) translateZ(40px); }
-  .left   { transform: rotateY(-90deg) translateZ(40px); }
-  .top    { transform: rotateX(90deg) translateZ(40px); }
-  .bottom { transform: rotateX(-90deg) translateZ(40px); }
-
-  @keyframes spin {
-    from { transform: rotateX(0) rotateY(0); }
-    to   { transform: rotateX(360deg) rotateY(360deg); }
-  }
-
-  @keyframes cubeFill {
-    0%   { background: rgba(255,255,255,0.05); }
-    100% { background: #9c4dcc; }
-  }
-</style>
-
-<script>
-  window.addEventListener("load", () => {
-    const preloader = document.getElementById("preloader");
-
-    setTimeout(() => {
-      preloader.style.opacity = "0";
-      setTimeout(() => {
-        preloader.style.display = "none";
-      }, 1000);
-    }, 5000); // 5 секунд
-  });
-
-// SETTINGS MODAL
-const settingsBtn = document.getElementById('settingsBtn');
-const settingsModal = document.getElementById('settingsModal');
-const closeSettings = document.getElementById('closeSettings');
-
-// RULES MODAL
-const rulesBtn = document.getElementById('rulesBtn');
-const rulesModal = document.getElementById('rulesModal');
-const closeRules = document.getElementById('closeRules');
-
-// HOW DOWNLOAD MODAL
-const howDownloadBtn = document.getElementById('howDownloadBtn');
-const howDownloadModal = document.getElementById('howDownloadModal');
-const closeDownload = document.getElementById('closeDownload');
-
-// Відкриття модалок
-settingsBtn.addEventListener('click', () => { settingsModal.style.display = 'flex'; });
-rulesBtn.addEventListener('click', () => { rulesModal.style.display = 'flex'; settingsModal.style.display = 'none'; });
-howDownloadBtn.addEventListener('click', () => { howDownloadModal.style.display = 'flex'; settingsModal.style.display = 'none'; });
-
-// Закриття по хрестиках
-[closeSettings, closeRules, closeDownload].forEach(btn => {
-  btn.addEventListener('click', (e) => {
-    e.target.closest('.modal').style.display = 'none';
-  });
-});
-
-// Закриття при кліку поза модалкою
-window.addEventListener('click', (e) => {
-  [settingsModal, rulesModal, howDownloadModal].forEach(m => {
-    if (e.target === m) m.style.display = 'none';
-  });
-});
-
-
-</script>
-
-<script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./service-worker.js')
-        .then(reg => console.log('✅ Service Worker зареєстрований:', reg.scope))
-        .catch(err => console.log('❌ Помилка Service Worker:', err));
+    preservationBtn.addEventListener('click', ()=> {
+      updatePreservationOutput();
+      presMessage.textContent = '';
+      saveCodeInput.value = '';
+      settingsModal.style.display = 'none';
+      preservationModal.style.display = 'flex';
     });
-  }
-</script>
+    closePreservation.addEventListener('click', ()=> preservationModal.style.display = 'none');
+    window.addEventListener('click', (e)=> { if (e.target === preservationModal) preservationModal.style.display = 'none'; });
 
+    copySaveBtn.addEventListener('click', async () => {
+      const code = saveCodeOutput.value;
+      if (!code) return;
+      try {
+        await navigator.clipboard.writeText(code);
+        presMessage.textContent = 'Code copied to clipboard ✔';
+      } catch(e) {
+        // fallback select
+        saveCodeOutput.select();
+        document.execCommand('copy');
+        presMessage.textContent = 'Code copied (fallback) ✔';
+      }
+      setTimeout(()=> presMessage.textContent = '', 2500);
+    });
+
+    loadSaveBtn.addEventListener('click', ()=> {
+      const raw = saveCodeInput.value.trim();
+      const res = parseSaveCode(raw);
+      if (!res.ok) {
+        presMessage.textContent = 'Error: ' + res.err;
+        return;
+      }
+      const incomingBest = res.best;
+      // apply: set best to incoming value (overwrite). You can change to Math.max(current,incoming) if prefer.
+      best = incomingBest;
+      localStorage.setItem('best2048', best);
+      bestEl.textContent = best;
+      presMessage.textContent = 'Save loaded. Your BEST updated. ✔';
+      updatePreservationOutput();
+      setTimeout(()=> presMessage.textContent = '', 3000);
+    });
+
+    // initialize preservation output on load
+    updatePreservationOutput();
+
+    // service worker registration (kept as before)
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker && navigator.serviceWorker.register && navigator.serviceWorker.register('./service-worker.js')
+          .then(reg => console.log('✅ Service Worker registered:', reg.scope))
+          .catch(err => console.log('❌ SW error:', err));
+      });
+    }
+  </script>
+
+  <!-- preloader (unchanged) -->
+  <div id="preloader">
+    <div class="preloader-text">
+      <span class="loading-text">NoneUp</span>
+    </div>
+    <div class="cube">
+      <div class="side front"></div>
+      <div class="side back"></div>
+      <div class="side left"></div>
+      <div class="side right"></div>
+      <div class="side top"></div>
+      <div class="side bottom"></div>
+    </div>
+  </div>
+
+  <style>
+    #preloader { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: #0d0d0d; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; gap: 40px; transition: opacity 1s ease; }
+    .preloader-text { position: relative; font-size: 2.5em; font-weight: bold; font-family: monospace; color: transparent; -webkit-text-stroke: 1px #9c4dcc; overflow: hidden; }
+    .loading-text { position: relative; display: inline-block; }
+    .loading-text::before { content: "NoneUp"; position: absolute; left: 0; top: 0; width: 0%; height: 100%; color: #9c4dcc; overflow: hidden; white-space: nowrap; animation: fillText 5s linear forwards; }
+    @keyframes fillText { from { width: 0%; } to { width: 100%; } }
+    .cube { position: relative; width: 80px; height: 80px; transform-style: preserve-3d; animation: spin 3s infinite linear; }
+    .side { position: absolute; width: 80px; height: 80px; background: rgba(255,255,255,0.05); border: 2px solid #9c4dcc; animation: cubeFill 5s linear forwards; }
+    .front  { transform: rotateY(0deg) translateZ(40px); }
+    .back   { transform: rotateY(180deg) translateZ(40px); }
+    .right  { transform: rotateY(90deg) translateZ(40px); }
+    .left   { transform: rotateY(-90deg) translateZ(40px); }
+    .top    { transform: rotateX(90deg) translateZ(40px); }
+    .bottom { transform: rotateX(-90deg) translateZ(40px); }
+    @keyframes spin { from { transform: rotateX(0) rotateY(0); } to { transform: rotateX(360deg) rotateY(360deg); } }
+    @keyframes cubeFill { 0% { background: rgba(255,255,255,0.05); } 100% { background: #9c4dcc; } }
+  </style>
+
+  <script>
+    window.addEventListener("load", () => {
+      const preloader = document.getElementById("preloader");
+      setTimeout(() => {
+        preloader.style.opacity = "0";
+        setTimeout(() => { preloader.style.display = "none"; }, 1000);
+      }, 5000);
+    });
+
+    // ---------- Preservation ----------
+    function generateCode(score) {
+      const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+      let hash = "";
+      for (let i = 0; i < 5; i++) {
+        hash += chars[Math.floor(Math.random() * chars.length)];
+      }
+      return "NUP-" + hash + "-" + btoa(score).replace(/=/g, "");
+    }
+
+    function decodeCode(code) {
+      try {
+        const parts = code.split("-");
+        const scorePart = parts[2];
+        return parseInt(atob(scorePart));
+      } catch {
+        return null;
+      }
+    }
+
+    function refreshCode() {
+      const code = generateCode(best);
+      document.getElementById("saveCode").textContent = code;
+    }
+
+    document.getElementById("preservationBtn").onclick = () => {
+      refreshCode();
+      preservationModal.style.display = "flex";
+    };
+
+    document.getElementById("closePreservation").onclick = () => {
+      preservationModal.style.display = "none";
+    };
+
+    document.getElementById("copyCodeBtn").onclick = () => {
+      const code = document.getElementById("saveCode").textContent;
+      navigator.clipboard.writeText(code);
+      alert("Code copied!");
+    };
+
+    document.getElementById("loadSaveBtn").onclick = () => {
+      const code = document.getElementById("loadInput").value.trim();
+      const value = decodeCode(code);
+      if (value && !isNaN(value)) {
+        best = Math.max(best, value);
+        localStorage.setItem("best", best);
+        bestEl.textContent = best;
+        alert("Save loaded!");
+      } else {
+        alert("Invalid code!");
+      }
+    };
+  </script>
 </body>
 </html>
